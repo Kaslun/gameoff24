@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Collections;
 using UnityEngine.Rendering;
+using System.Linq;
+using Unity.VisualScripting;
+using System.Threading;
 
 public class CommandManager : MonoBehaviour
 {
@@ -17,10 +20,23 @@ public class CommandManager : MonoBehaviour
     [SerializeField, Range(0,1)]
     private float textSpeed = 0.1f;
 
+    private bool isRunning = false;
+
+    private void Start()
+    {
+        input.ActivateInputField();
+    }
+
     private void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") && !isRunning)
         {
+            StartCoroutine(DeleteText());
+            while (isRunning)
+            {
+                return;
+            }
+
             print("Input recieved");
             print("User input: " + input.text);
             if (Enum.TryParse<Commands>(input.text.ToLower(), out Commands c))
@@ -64,13 +80,32 @@ public class CommandManager : MonoBehaviour
 
     public IEnumerator TypeText(string stringOut)
     {
+        isRunning = true;
         foreach (char c in stringOut)
         {
             output.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
 
+        isRunning = false;
         input.ActivateInputField();
+    }
+
+    public IEnumerator DeleteText()
+    {
+        print("Deleting text...");
+        isRunning = true;
+        string outString = output.text;
+        int stringLength = outString.Length;
+        print("Output: " + outString);
+        for(int i = 0; i <= stringLength; i++)
+        {
+            print(i + " is being deleted");
+            outString.Remove(outString.Length - 1);
+            output.text = outString;
+            yield return new WaitForSeconds(textSpeed);
+        }
+        isRunning = false;
     }
 }
 

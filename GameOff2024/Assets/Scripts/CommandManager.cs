@@ -31,33 +31,38 @@ public class CommandManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit") && !isRunning)
         {
-            StartCoroutine(DeleteText());
-            while (isRunning)
-            {
-                return;
-            }
-
-            print("Input recieved");
-            print("User input: " + input.text);
-            if (Enum.TryParse<Commands>(input.text.ToLower(), out Commands c))
-            {
-                RunCommand(c);
-            }
-            else
-            {
-                output.text += "<br>";
-                StartCoroutine(TypeText(errorMessage));
-            }
-
-            input.text = "";
-            input.DeactivateInputField();
+            StartCoroutine(SubmitCommand());
         }
+    }
+
+    public IEnumerator SubmitCommand()
+    {
+        StartCoroutine(DeleteText());
+        while (isRunning)
+        {
+            yield return new WaitForSeconds(.1f);
+            print("waiting...");
+        }
+
+        print("Text deleted...");
+        print("Input recieved");
+        print("User input: " + input.text);
+        if (Enum.TryParse<Commands>(input.text.ToLower(), out Commands c))
+        {
+            RunCommand(c);
+        }
+        else
+        {
+            StartCoroutine(TypeText(errorMessage));
+        }
+
+        input.text = "";
+        input.DeactivateInputField();
     }
 
     public void RunCommand(Commands command)
     {
         string outString = string.Empty;
-        output.text += "<br>";
         print("Trying to run command");
         switch (command)
         {
@@ -98,12 +103,13 @@ public class CommandManager : MonoBehaviour
         string outString = output.text;
         int stringLength = outString.Length;
         print("Output: " + outString);
-        for(int i = 0; i <= stringLength; i++)
+        for(int i = 0; i < stringLength; i++)
         {
             print(i + " is being deleted");
-            outString.Remove(outString.Length - 1);
+            outString = outString.Remove(outString.Length - 1);
             output.text = outString;
-            yield return new WaitForSeconds(textSpeed);
+            print(outString);
+            yield return new WaitForSeconds(textSpeed / 2);
         }
         isRunning = false;
     }

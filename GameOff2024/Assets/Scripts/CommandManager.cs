@@ -16,20 +16,74 @@ public class CommandManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI output;
     [SerializeField]
+    private TextMeshProUGUI hangmanOutput;
+    [SerializeField]
     private string errorMessage;
+    [SerializeField]
+    private string welcomeMessage = "Welcome to Corporate INC!";
+
     [SerializeField, Range(0,1)]
     private float textSpeed = 0.1f;
+    [SerializeField]
+    private GameObject[] screens;
 
+    [SerializeField]
+    private HelpManager helpManager;
+    [SerializeField]
+    private Hangman hangmanManager;
+    [SerializeField]
+    private ScreenManager screenManager;
+    [SerializeField]
+    private TextManager textManager;
+
+    private bool lookingForGame = false;
     private bool isRunning = false;
 
     private void Start()
     {
+        helpManager = FindFirstObjectByType<HelpManager>();
+        hangmanManager = FindFirstObjectByType<Hangman>();
+        screenManager = FindFirstObjectByType<ScreenManager>();
+        textManager = FindFirstObjectByType<TextManager>();
+        input.resetOnDeActivation = true;
+    }
+
+    private void OnDisable()
+    {
+        print("Commands are disabled");
+        isRunning = false;
+    }
+
+    private void OnEnable()
+    {
+        EnableCommands();
+    }
+
+    private void EnableCommands()
+    {
+        if(output.text != string.Empty)
+        {
+            output.text = string.Empty;
+        }
+        RunCommand(Commands.welcome);
         input.ActivateInputField();
+        isRunning = true;
+        print("Enabled commands");
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit") && !isRunning)
+        if (!isRunning)
+        {
+            return;
+        }
+
+        if (!input.isFocused && !textManager.isRunning)
+        {
+            input.ActivateInputField();
+        }
+
+        if (Input.GetButtonDown("Submit") && !textManager.isRunning)
         {
             StartCoroutine(SubmitCommand());
         }
@@ -37,23 +91,33 @@ public class CommandManager : MonoBehaviour
 
     public IEnumerator SubmitCommand()
     {
-        StartCoroutine(DeleteText());
-        while (isRunning)
+        StartCoroutine(textManager.DeleteText(output));
+
+        string s = input.text.Replace(" ", "");
+
+        while (textManager.isRunning)
         {
             yield return new WaitForSeconds(.1f);
-            print("waiting...");
         }
 
-        print("Text deleted...");
-        print("Input recieved");
-        print("User input: " + input.text);
-        if (Enum.TryParse<Commands>(input.text.ToLower(), out Commands c))
+
+        if (lookingForGame)
+        {
+            if (Enum.TryParse<Games>(s.ToLower(), out Games g))
+            {
+                RunGame(g);
+                input.text = "";
+                yield break;
+            }
+        }
+
+        if (Enum.TryParse<Commands>(s.ToLower(), out Commands c))
         {
             RunCommand(c);
         }
         else
         {
-            StartCoroutine(TypeText(errorMessage));
+            RunCommand(Commands.error);
         }
 
         input.text = "";
@@ -67,7 +131,12 @@ public class CommandManager : MonoBehaviour
         switch (command)
         {
             case Commands.help:
-                outString = "Help";
+                helpManager.SetCurrentPage(helpManager.helpPageNumber);
+                screenManager.SwitchScreens(1);
+                break;
+            case Commands.run:
+                lookingForGame = true;
+                outString = "Which program do you want to run?";
                 break;
             case Commands.exit:
                 outString = "Exit";
@@ -78,40 +147,59 @@ public class CommandManager : MonoBehaviour
             case Commands.update:
                 outString = "Update";
                 break;
+            case Commands.error:
+                outString = errorMessage;
+                break;
+            case Commands.runhangman:
+                RunGame(Games.hangman);
+                break;
+            case Commands.welcome:
+                outString = welcomeMessage;
+                break;
         }
 
-        StartCoroutine(TypeText(outString));
+        StartCoroutine(textManager.TypeText(output, outString));
     }
 
-    public IEnumerator TypeText(string stringOut)
+    public static Commands ParseCommand(string input)
     {
-        isRunning = true;
-        foreach (char c in stringOut)
+        if (Enum.TryParse<Commands>(input.ToLower(), out Commands c))
         {
-            output.text += c;
-            yield return new WaitForSeconds(textSpeed);
+            return c;
         }
 
-        isRunning = false;
-        input.ActivateInputField();
+        else
+            return Commands.error;
     }
 
-    public IEnumerator DeleteText()
+    public static Games ParseGame(string input)
     {
-        print("Deleting text...");
-        isRunning = true;
-        string outString = output.text;
-        int stringLength = outString.Length;
-        print("Output: " + outString);
-        for(int i = 0; i < stringLength; i++)
+        if (Enum.TryParse<Games>(input.ToLower(), out Games g))
         {
-            print(i + " is being deleted");
-            outString = outString.Remove(outString.Length - 1);
-            output.text = outString;
-            print(outString);
-            yield return new WaitForSeconds(textSpeed / 2);
+            return g;
         }
-        isRunning = false;
+
+        else
+            return Games.error;
+    }
+
+    private void RunGame(Games game)
+    {
+        switch (game)
+        {
+            case Games.error:
+                RunCommand(Commands.error);
+                break;
+            case Games.hangman:
+                screenManager.SwitchScreens(1);
+                break;
+            case Games.globalthermalnuclearwarfare:
+                StartCoroutine(textManager.TypeText(output, "Wouldn't you rather like to play a game of chess, Dr. Falken?"));
+                break;
+        }
+
+        lookingForGame = false;
+        input.text = "";
     }
 }
 
@@ -119,6 +207,17 @@ public enum Commands
 {
     help,
     exit,
+    run,
+    runhangman,
     list,
+    error,
+    welcome,
     update
+}
+
+public enum Games
+{
+    hangman,
+    globalthermalnuclearwarfare,
+    error
 }

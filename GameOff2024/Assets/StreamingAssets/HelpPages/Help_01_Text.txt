@@ -1,0 +1,20 @@
+Welcome to [INSERT CORPORATE NAME]!
+
+We hope you're feeling in a productive and efficient mood today.
+
+Rules:
+
+Due to recent events, games are not allowed to play on any corporate owned computers, either professional or homemade.
+
+Also related to these incidents we've had to limit the amount of commands each employee has access to.
+
+You currently have access to these commands:
+
+- Help
+|-> Current page. When new commands are unlocked they will be listed here.
+
+- List
+|-> List available files in current folder.
+
+- Run
+|-> Used to run files in current folder. Do NOT use this to play any illegally created games.

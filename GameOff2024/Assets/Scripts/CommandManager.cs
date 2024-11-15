@@ -103,7 +103,7 @@ public class CommandManager : MonoBehaviour
 
         if (lookingForGame)
         {
-            if (Enum.TryParse<Games>(s.ToLower(), out Games g))
+            if (Enum.TryParse<Programs>(s.ToLower(), out Programs g))
             {
                 RunGame(g);
                 input.text = "";
@@ -151,7 +151,7 @@ public class CommandManager : MonoBehaviour
                 outString = errorMessage;
                 break;
             case Commands.runhangman:
-                RunGame(Games.hangman);
+                RunGame(Programs.hangman);
                 break;
             case Commands.welcome:
                 outString = welcomeMessage;
@@ -172,29 +172,32 @@ public class CommandManager : MonoBehaviour
             return Commands.error;
     }
 
-    public static Games ParseGame(string input)
+    public static Programs ParseGame(string input)
     {
-        if (Enum.TryParse<Games>(input.ToLower(), out Games g))
+        if (Enum.TryParse<Programs>(input.ToLower(), out Programs g))
         {
             return g;
         }
 
         else
-            return Games.error;
+            return Programs.error;
     }
 
-    private void RunGame(Games game)
+    private void RunGame(Programs program)
     {
-        switch (game)
+        switch (program)
         {
-            case Games.error:
+            case Programs.error:
                 RunCommand(Commands.error);
                 break;
-            case Games.hangman:
+            case Programs.hangman:
                 screenManager.SwitchScreens(1);
                 break;
-            case Games.globalthermalnuclearwarfare:
+            case Programs.globalthermalnuclearwarfare:
                 StartCoroutine(textManager.TypeText(output, "Wouldn't you rather like to play a game of chess, Dr. Falken?"));
+                break;
+            case Programs.work:
+                screenManager.SwitchScreens(2);
                 break;
         }
 
@@ -212,12 +215,13 @@ public enum Commands
     list,
     error,
     welcome,
-    update
+    update,
 }
 
-public enum Games
+public enum Programs
 {
     hangman,
     globalthermalnuclearwarfare,
-    error
+    error,
+    work
 }

@@ -7,12 +7,18 @@ using UnityEngine;
 public class HelpManager : MonoBehaviour
 {
     [SerializeField]
-    private string filePath = Application.dataPath + "/StreamingAssets/HelpPages";
+    private string filePath;
 
     [SerializeField]
     private TextMeshProUGUI outputText;
 
+    [SerializeField]
+    private TextReader textReader;
+
     public List<string> fileNames = new List<string>();
+
+    [SerializeField]
+    private string[] currentPage;
 
     public int helpPageNumber = 0;
 
@@ -21,19 +27,26 @@ public class HelpManager : MonoBehaviour
         //LoadFiles(filePath);
     }
 
-    public void SetCurrentPage(int pageNum)
+    public string GetCurrentPage(int pageNum)
     {
         if (pageNum > fileNames.Count)
         {
-            return;
+            return null;
         }
 
-        string[] page = File.ReadAllLines(filePath + fileNames[pageNum]);
-
-        foreach (string line in page)
+        if(currentPage.Length <= 0)
         {
-            outputText.text += "<br>" + line;
+            currentPage = textReader.ReadTextFile(filePath);
         }
+
+        string outString = string.Empty;
+
+        foreach (string line in currentPage)
+        {
+            outString += "<br>" + line;
+        }
+
+        return outString;
     }
 
     private void LoadFiles(string path)

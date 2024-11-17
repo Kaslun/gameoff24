@@ -12,4 +12,10 @@ public class TextReader : MonoBehaviour
 
         return fileContent;
     }
+
+    public string[] ReadJSONFile(string fileName)
+    {
+
+        return null;
+    }
 }

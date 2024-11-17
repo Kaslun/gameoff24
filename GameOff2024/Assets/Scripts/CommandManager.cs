@@ -21,6 +21,8 @@ public class CommandManager : MonoBehaviour
     private string errorMessage;
     [SerializeField]
     private string welcomeMessage = "Welcome to Corporate INC!";
+    [SerializeField]
+    private string[] splitInput;
 
     [SerializeField, Range(0,1)]
     private float textSpeed = 0.1f;
@@ -35,6 +37,10 @@ public class CommandManager : MonoBehaviour
     private ScreenManager screenManager;
     [SerializeField]
     private TextManager textManager;
+    [SerializeField]
+    private ProgramManager folderManager;
+    [SerializeField]
+    private ProgramManager programManager;
 
     private bool lookingForGame = false;
     private bool isRunning = false;
@@ -45,6 +51,8 @@ public class CommandManager : MonoBehaviour
         hangmanManager = FindFirstObjectByType<Hangman>();
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
+        folderManager = FindFirstObjectByType<ProgramManager>();
+        programManager = FindFirstObjectByType<ProgramManager>();
         input.resetOnDeActivation = true;
     }
 
@@ -89,36 +97,24 @@ public class CommandManager : MonoBehaviour
         }
     }
 
+    private string[] SplitInput(string input)
+    {
+        string[] splitInput = input.Split(" ".ToCharArray()[0]);
+        return splitInput;
+    }
+
     public IEnumerator SubmitCommand()
     {
-        StartCoroutine(textManager.DeleteText(output));
+        splitInput = SplitInput(input.text);
 
-        string s = input.text.Replace(" ", "");
+        string s = splitInput[0].ToLower();
 
         while (textManager.isRunning)
         {
             yield return new WaitForSeconds(.1f);
         }
 
-
-        if (lookingForGame)
-        {
-            if (Enum.TryParse<Programs>(s.ToLower(), out Programs g))
-            {
-                RunGame(g);
-                input.text = "";
-                yield break;
-            }
-        }
-
-        if (Enum.TryParse<Commands>(s.ToLower(), out Commands c))
-        {
-            RunCommand(c);
-        }
-        else
-        {
-            RunCommand(Commands.error);
-        }
+        RunCommand(ParseCommand(s));
 
         input.text = "";
         input.DeactivateInputField();
@@ -128,42 +124,40 @@ public class CommandManager : MonoBehaviour
     {
         string outString = string.Empty;
         print("Trying to run command");
+
+        if (splitInput.Length > 1)
+            print("Split input 1: " + splitInput[1]);
+
         switch (command)
         {
             case Commands.help:
-                helpManager.SetCurrentPage(helpManager.helpPageNumber);
-                screenManager.SwitchScreens(1);
+                outString = helpManager.GetCurrentPage(0);
                 break;
             case Commands.run:
-                lookingForGame = true;
-                outString = "Which program do you want to run?";
+                if (splitInput.Length <= 1)
+                    outString = errorMessage;
+                else
+                    programManager.TryRunProgram(splitInput[1]);
                 break;
             case Commands.exit:
-                outString = "Exit";
                 break;
             case Commands.list:
-                outString = "List";
-                break;
-            case Commands.update:
-                outString = "Update";
+                outString = "Programs in your current folder:<br>" + folderManager.GetFileList();
                 break;
             case Commands.error:
                 outString = errorMessage;
-                break;
-            case Commands.runhangman:
-                RunGame(Programs.hangman);
                 break;
             case Commands.welcome:
                 outString = welcomeMessage;
                 break;
         }
 
-        StartCoroutine(textManager.TypeText(output, outString));
+        StartCoroutine(textManager.TypeText(output, outString, true));
     }
 
     public static Commands ParseCommand(string input)
     {
-        if (Enum.TryParse<Commands>(input.ToLower(), out Commands c))
+        if (Enum.TryParse<Commands>(input, out Commands c))
         {
             return c;
         }
@@ -172,9 +166,11 @@ public class CommandManager : MonoBehaviour
             return Commands.error;
     }
 
-    public static Programs ParseGame(string input)
+    private Programs ParseProgram(string input)
     {
-        if (Enum.TryParse<Programs>(input.ToLower(), out Programs g))
+        print(input);
+
+        if (Enum.TryParse<Programs>(input, out Programs g))
         {
             return g;
         }
@@ -183,8 +179,10 @@ public class CommandManager : MonoBehaviour
             return Programs.error;
     }
 
-    private void RunGame(Programs program)
+    public void RunProgram(string programName)
     {
+        Programs program = ParseProgram(programName);
+
         switch (program)
         {
             case Programs.error:
@@ -194,7 +192,7 @@ public class CommandManager : MonoBehaviour
                 screenManager.SwitchScreens(1);
                 break;
             case Programs.globalthermalnuclearwarfare:
-                StartCoroutine(textManager.TypeText(output, "Wouldn't you rather like to play a game of chess, Dr. Falken?"));
+                StartCoroutine(textManager.TypeText(output, "Wouldn't you rather like to play a game of hangman, Dr. Falken?", true));
                 break;
             case Programs.work:
                 screenManager.SwitchScreens(2);
@@ -211,11 +209,9 @@ public enum Commands
     help,
     exit,
     run,
-    runhangman,
     list,
     error,
-    welcome,
-    update,
+    welcome
 }
 
 public enum Programs

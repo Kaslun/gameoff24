@@ -84,7 +84,7 @@ public class Hangman : MonoBehaviour
             {
                 if (CommandManager.ParseCommand(input.text) == Commands.exit)
                 {
-                    StartCoroutine(EndGame());
+                    EndGame();
                 }
             }
             else
@@ -97,8 +97,6 @@ public class Hangman : MonoBehaviour
 
     public IEnumerator CheckInput()
     {
-        StartCoroutine(textManager.DeleteText(output));
-
         while (textManager.isRunning)
         {
             yield return new WaitForSeconds(.1f);
@@ -106,7 +104,7 @@ public class Hangman : MonoBehaviour
 
         if (input.text.Length > 1)
         {
-            StartCoroutine(textManager.TypeText(output, "Input too long, please type only one symbol"));
+            StartCoroutine(textManager.TypeText(output, "Input too long, please type only one symbol", true));
             yield break;
         }
 
@@ -137,15 +135,7 @@ public class Hangman : MonoBehaviour
             fails++;
             wrongAnswers += input.text;
 
-            StartCoroutine(textManager.DeleteText(output));
-
-            while (textManager.isRunning)
-            {
-                yield return new WaitForSeconds(.1f);
-                print("Deleting text: " + output.name);
-            }
-
-            StartCoroutine(textManager.TypeText(output, wrongAnswers));
+            StartCoroutine(textManager.TypeText(output, wrongAnswers, true));
             while (textManager.isRunning)
             {
                 print("Writing text: " + output.name + " : " + wrongAnswers);
@@ -166,19 +156,13 @@ public class Hangman : MonoBehaviour
 
         if (score >= currentAnswer.Length)
         {
-            StartCoroutine(textManager.TypeText(output, "You win! Type 'exit' to end the game"));
+            StartCoroutine(textManager.TypeText(output, "You win! Type 'exit' to end the game", true));
             gameOver = true;
         }
 
         if(fails >= maxFails)
         {
-            StartCoroutine(textManager.DeleteText(output));
-            while (textManager.isRunning)
-            {
-                yield return new WaitForSeconds(.1f);
-            }
-
-            StartCoroutine(textManager.TypeText(output, "You lost... Type 'exit' to end the game"));
+            StartCoroutine(textManager.TypeText(output, "You lost... Type 'exit' to end the game", true));
             foreach(TextMeshProUGUI t in textFields)
             {
                 t.gameObject.SetActive(true);
@@ -190,17 +174,9 @@ public class Hangman : MonoBehaviour
         input.ActivateInputField();
     }
 
-    private IEnumerator EndGame()
+    private void EndGame()
     {
         isRunning = false;
-
-        StartCoroutine(textManager.DeleteText(output));
-
-        while (textManager.isRunning)
-        {
-            yield return new WaitForSeconds(.1f);
-        }
-
         screenManager.SwitchScreens(0);
     }
 

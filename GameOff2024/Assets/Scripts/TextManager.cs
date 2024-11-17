@@ -9,8 +9,18 @@ public class TextManager : MonoBehaviour
 
     public bool isRunning = false;
 
-    public IEnumerator TypeText(TextMeshProUGUI outputField, string stringOut)
+    public IEnumerator TypeText(TextMeshProUGUI outputField, string stringOut, bool deleteTextFirst)
     {
+        if (deleteTextFirst)
+        {
+            StartCoroutine(DeleteText(outputField));
+
+            while (isRunning)
+            {
+                yield return new WaitForSeconds(.1f);
+            }
+        }
+
         isRunning = true;
         foreach (char c in stringOut)
         {
@@ -20,7 +30,7 @@ public class TextManager : MonoBehaviour
         isRunning = false;
     }
 
-    public IEnumerator DeleteText(TextMeshProUGUI output)
+    private IEnumerator DeleteText(TextMeshProUGUI output)
     {
         isRunning = true;
         string outString = output.text;

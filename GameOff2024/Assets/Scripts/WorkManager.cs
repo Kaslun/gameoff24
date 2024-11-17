@@ -36,20 +36,28 @@ public class WorkManager : MonoBehaviour
         
         currentWord = NewWord();
 
-        StartCoroutine(textManager.TypeText(output, preFix + currentWord));
+        StartCoroutine(textManager.TypeText(output, preFix + currentWord, true));
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (!textManager.isRunning)
         {
-            if(input.text.ToLower() == currentWord.ToLower() && !textManager.isRunning)
+            if (Input.GetButtonDown("Submit"))
             {
-                StartCoroutine(CorrectInput());
+                if (input.text.ToLower() == currentWord.ToLower())
+                {
+                    CorrectInput();
+                }
+                if (input.text.ToLower() == "exit")
+                {
+                    screenManager.SwitchScreens(0);
+                }
             }
-            if (input.text.ToLower() == "exit" && !textManager.isRunning)
+
+            if (!input.isFocused)
             {
-                screenManager.SwitchScreens(0);
+                input.ActivateInputField();
             }
         }
     }
@@ -74,19 +82,12 @@ public class WorkManager : MonoBehaviour
         return newWord;
     }
 
-    private IEnumerator CorrectInput()
+    private void CorrectInput()
     {
-        StartCoroutine(textManager.DeleteText(output));
-
-        while (textManager.isRunning)
-        {
-            yield return new WaitForSeconds(.1f);
-        }
-
         input.text = string.Empty;
         string newWord = NewWord();
         currentWord = newWord;
 
-        StartCoroutine(textManager.TypeText(output, preFix + newWord));
+        StartCoroutine(textManager.TypeText(output, preFix + newWord, true));
     }
 }

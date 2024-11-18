@@ -140,9 +140,13 @@ public class CommandManager : MonoBehaviour
                     programManager.TryRunProgram(splitInput[1]);
                 break;
             case Commands.exit:
+                if(programManager.folderLayerCount >= 1)
+                {
+                    programManager.ExitFolder();
+                }
                 break;
             case Commands.list:
-                outString = "Programs in your current folder:<br>" + folderManager.GetFileList();
+                outString = "Programs in '" + folderManager.currentFolderName + "':\n" + folderManager.GetFileList();
                 break;
             case Commands.error:
                 outString = errorMessage;
@@ -197,6 +201,9 @@ public class CommandManager : MonoBehaviour
             case Programs.work:
                 screenManager.SwitchScreens(2);
                 break;
+            case Programs.mastermind:
+                screenManager.SwitchScreens(3);
+                break;
         }
 
         lookingForGame = false;
@@ -217,6 +224,7 @@ public enum Commands
 public enum Programs
 {
     hangman,
+    mastermind,
     globalthermalnuclearwarfare,
     error,
     work

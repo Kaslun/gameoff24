@@ -43,7 +43,7 @@ public class HelpManager : MonoBehaviour
 
         foreach (string line in currentPage)
         {
-            outString += "<br>" + line;
+            outString += "\n" + line;
         }
 
         return outString;

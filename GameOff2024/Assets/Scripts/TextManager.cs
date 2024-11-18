@@ -20,6 +20,10 @@ public class TextManager : MonoBehaviour
                 yield return new WaitForSeconds(.1f);
             }
         }
+        else
+        {
+            stringOut = "\n" + stringOut;
+        }
 
         isRunning = true;
         foreach (char c in stringOut)

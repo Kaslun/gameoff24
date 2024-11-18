@@ -1,22 +1,30 @@
 using NUnit.Framework;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class ProgramManager : MonoBehaviour
 {
     [SerializeField]
-    public FileInfo[] files;
+    public List<FileInfo> files = new List<FileInfo>();
 
     [SerializeField]
-    public DirectoryInfo[] folders;
-
-    [SerializeField]
-    private string fileName = "programs";
+    public List<DirectoryInfo> folders = new List<DirectoryInfo>();
 
     [SerializeField]
     private string folderPath = Application.streamingAssetsPath;
+
+    [SerializeField]
+    public string currentFolderName;
+
+    [SerializeField]
+    private string mainFolderName;
+
+    [SerializeField]
+    private string hiddenFolderName;
 
     [SerializeField]
     public string textFileContent;
@@ -33,11 +41,12 @@ public class ProgramManager : MonoBehaviour
     [SerializeField]
     private CommandManager commandManager;
 
+    [SerializeField]
+    public int folderLayerCount = 0;
+
     private void Start()
     {
-        PopulateFiles();
-
-        if(textReader == null)
+        if (textReader == null)
         {
             textReader = FindFirstObjectByType<TextReader>();
         }
@@ -51,61 +60,119 @@ public class ProgramManager : MonoBehaviour
         {
             commandManager = FindFirstObjectByType<CommandManager>();
         }
+
+        folderPath += mainFolderName + "/";
+        currentFolderName = mainFolderName;
+        PopulateFiles();
+
     }
 
     public void TryRunProgram(string name)
     {
-        string[] input = name.Split(".".ToCharArray()[0]);
-        string extension = input[1];
+        string[] input = new string[2];
+        string extension = string.Empty;
+        FileType fileType;
 
-        print(extension);
+        if (name.Contains("."))
+        {
+            input = name.Split(".".ToCharArray()[0]);
+            extension = input[1];
+            print(extension);
+        }
+        else
+        {
+            extension = "dir";
+        }
 
-        if (Enum.TryParse<FileType>(extension.ToLower(), out FileType fileType))
+        if (Enum.TryParse<FileType>(extension.ToLower(), out fileType))
         {
             print("Parsed extension succesfully");
-            textFileContent = string.Empty;
-            string outString = string.Empty;
+            print("Extension = " + fileType.ToString());
 
-            foreach (FileInfo f in files)
+            switch (fileType)
             {
-                if (name.ToLower() == f.Name.ToLower())
-                {
-                    switch (fileType)
+                case FileType.txt:
+                    foreach (FileInfo f in files)
                     {
-                        case FileType.txt:
+                        if (name.ToLower() == f.Name.ToLower())
+                        {
                             print("Textfile found!");
                             string jointContent = string.Empty;
                             string[] splitContent = textReader.ReadTextFile(input[0]);
 
                             foreach (string c in splitContent)
                             {
-                                jointContent += c + "<br>";
+                                jointContent += c + "\n";
                             }
 
                             StartCoroutine(textManager.TypeText(output, jointContent, true));
-                            break;
-                        case FileType.exe:
+                        }
+                        else
+                        {
+                            StartCoroutine(textManager.TypeText(output, "Couldn't find file.", true));
+                        }
+                    }
+                    break;
+                case FileType.exe:
+                    foreach (FileInfo f in files)
+                    {
+                        if (name.ToLower() == f.Name.ToLower())
+                        {
                             print("Running program: " + input[0]);
                             commandManager.RunProgram(input[0]);
                             break;
+                        }
+                        print("Running...");
+                    }                       
+                    StartCoroutine(textManager.TypeText(output, "Couldn't find program.", true));
+                    break;
+                case FileType.dir:
+                    print("Checking folders...");
+                    foreach (DirectoryInfo di in folders)
+                    {
+                        if (di.Name.ToLower() == name.ToLower())
+                        {
+                            print("Found folder: " + name);
+                            EnterFolder(name);
+                        }
                     }
-                }
+                    break;
             }
         }
         else
             print("Unable to parse");
     }
 
+    public void EnterFolder(string folderName)
+    {
+        folderPath += folderName + "/";
+        PopulateFiles();
+        currentFolderName = folderName + "/";
+        folderLayerCount++;
+        commandManager.RunCommand(Commands.list);
+    }
+
+    public void ExitFolder()
+    {
+        print("Removing folder name...");
+        folderPath = folderPath.Remove(folderPath.Length - currentFolderName.Length);
+        folderLayerCount--;
+        currentFolderName = mainFolderName;
+        PopulateFiles();
+        commandManager.RunCommand(Commands.list);
+    }
+
     private void PopulateFiles()
     {
         DirectoryInfo dirInfo = new DirectoryInfo(folderPath);
-        files = dirInfo.GetFiles();
-        folders = dirInfo.GetDirectories();
+
+        files = dirInfo.GetFiles().ToList<FileInfo>();
+        folders = dirInfo.GetDirectories().ToList<DirectoryInfo>();
     }
 
     public string GetFileList()
     {
-        if(files.Length <= 0)
+        if(files.Count <= 0)
         {
             PopulateFiles();
         }
@@ -113,7 +180,7 @@ public class ProgramManager : MonoBehaviour
 
         foreach(DirectoryInfo d in folders)
         {
-            print(d.FullName);
+            print(d.Name);
             if(d.Extension != ".meta")
             {
                 fileList += d.Name + "      ";
@@ -136,6 +203,7 @@ public class ProgramManager : MonoBehaviour
     {
         txt,
         json,
+        dir,
         exe
     }
         

@@ -13,10 +13,19 @@ public class Hangman : MonoBehaviour
     private string[] answerOptions;
 
     [SerializeField]
+    private string fileName;
+
+    [SerializeField]
     private TextMeshProUGUI[] textFields;
 
     [SerializeField]
-    private char[] currentAnswer;
+    private string currentAnswer;
+
+    [SerializeField] 
+    private string guessedAnswer;
+
+    [SerializeField] 
+    private string[] hiddenCodes;
 
     [SerializeField]
     private int score;
@@ -32,6 +41,8 @@ public class Hangman : MonoBehaviour
 
     [SerializeField]
     private TextManager textManager;
+    [SerializeField]
+    private TextReader textReader;
 
     [SerializeField]
     private TMP_InputField input;
@@ -40,57 +51,68 @@ public class Hangman : MonoBehaviour
 
     [SerializeField]
     private string wrongAnswers;
+    [SerializeField]
+    private string correctAnswers;
 
-    public bool isRunning;
     private bool gameOver;
 
     private void Start()
     {
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
+        textReader = FindFirstObjectByType<TextReader>();
         wrongAnswers = "Wrong answers = ";
-        isRunning = false;
         gameOver = false;
+        PopulateOptions();
     }
 
     public void OnEnable()
     {
         PickRandomAnswer();
+        PopulateOptions();
+
         input.text = "";
         wrongAnswers = "Wrong answers = ";
         fails = 0;
         score = 0;
-        isRunning = true;
         gameOver = false;
     }
 
     private void PickRandomAnswer()
     {
-        currentAnswer = answerOptions[Random.Range(0, answerOptions.Length)].ToLower().ToCharArray();
+        currentAnswer = answerOptions[Random.Range(0, answerOptions.Length)].ToLower();
         PopulateAnswers(currentAnswer);
 
     }
 
     private void Update()
     {
-        if (!input.isFocused && !textManager.isRunning)
+        if (textManager.isRunning)
+        {
+            return;
+        }
+        if (!input.isFocused)
         {
             input.ActivateInputField();
         }
 
-        if (Input.GetButtonDown("Submit") && !textManager.isRunning)
+        if (Input.GetButtonDown("Submit"))
         {
-            if (gameOver)
+            if (CommandManager.ParseCommand(input.text) == Commands.exit)
             {
-                if (CommandManager.ParseCommand(input.text) == Commands.exit)
-                {
-                    EndGame();
-                }
+                EndGame();
             }
             else
             {
-                StartCoroutine(CheckInput());
-                print("Checking input");
+                if (hiddenCodes.Contains<string>(input.text))
+                {
+                    print("You found a hidden code!");
+                }
+                else
+                {
+                    StartCoroutine(CheckInput());
+                    print("Checking input");
+                }
             }
         }
     }
@@ -131,18 +153,21 @@ public class Hangman : MonoBehaviour
         }
         else
         {
-            print("Incorrect guess");
-            fails++;
-            wrongAnswers += input.text;
-
-            StartCoroutine(textManager.TypeText(output, wrongAnswers, true));
-            while (textManager.isRunning)
+            if (wrongAnswers.Contains<char>(input.text[0]))
             {
-                print("Writing text: " + output.name + " : " + wrongAnswers);
-                yield return new WaitForSeconds(.1f);
-            }
+                print("Incorrect guess");
+                fails++;
+                wrongAnswers += input.text;
 
-            StartCoroutine(CheckScore());
+                StartCoroutine(textManager.TypeText(output, wrongAnswers, true));
+                while (textManager.isRunning)
+                {
+                    print("Writing text: " + output.name + " : " + wrongAnswers);
+                    yield return new WaitForSeconds(.1f);
+                }
+
+                StartCoroutine(CheckScore());
+            }
         }
         input.text = "";
     }
@@ -176,12 +201,29 @@ public class Hangman : MonoBehaviour
 
     private void EndGame()
     {
-        isRunning = false;
         screenManager.SwitchScreens(0);
     }
 
-    private void PopulateAnswers(char[] answer)
+
+    private void PopulateOptions()
     {
+        answerOptions = textReader.ReadTextFile(fileName);
+    }
+
+    private void PopulateAnswers(string answer)
+    {
+        for(int i = 0; i < answer.Length; i++)
+        {
+            foreach (char c in correctAnswers)
+            {
+                if(answer[i] == c)
+                {
+                    guessedAnswer += answer[i];
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < textFields.Length; i++)
         {
             textFields[i].text = answer[i].ToString();

@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44793bba279f9334395ff898cacd6d8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textSpeed: 0.03
   isRunning: 0
 --- !u!4 &24448116
 Transform:
@@ -781,7 +782,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &193680206
 RectTransform:
   m_ObjectHideFlags: 0
@@ -859,11 +860,8 @@ MonoBehaviour:
   hangmanOutput: {fileID: 167424707}
   errorMessage: Incorrect input, try 'help' if you're stuck
   welcomeMessage: Welcome to Corporate INC!
-  splitInput: []
-  textSpeed: 0.03
   screens: []
   helpManager: {fileID: 1604307294}
-  hangmanManager: {fileID: 1538196446}
   screenManager: {fileID: 1215872081}
   textManager: {fileID: 24448115}
   programManager: {fileID: 1604307295}
@@ -1534,7 +1532,7 @@ Transform:
   m_GameObject: {fileID: 432842157}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 490, y: 275.5, z: -10}
+  m_LocalPosition: {x: 598.74994, y: 449, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3399,7 +3397,7 @@ Transform:
   m_GameObject: {fileID: 991155887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 490, y: 275.5, z: -10}
+  m_LocalPosition: {x: 598.74994, y: 449, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4625,7 +4623,11 @@ MonoBehaviour:
   output: {fileID: 1782332071}
   fileName: WorkWords
   words: []
-  preFix: 'Type ''exit'' to leave<br>Type: '
+  preFix: 'Type: '
+  postFix: '
+
+    Type ''exit'' to leave'
+  errorMessage: Incorrect input. This has been reported to you supervisor
   textManager: {fileID: 24448115}
   textReader: {fileID: 24448117}
   screenManager: {fileID: 1215872081}

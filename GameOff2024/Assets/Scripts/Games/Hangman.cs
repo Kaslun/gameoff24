@@ -69,9 +69,6 @@ public class Hangman : MonoBehaviour
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
         textReader = FindFirstObjectByType<TextReader>();
-        wrongAnswers = "Wrong answers = ";
-        gameOver = false;
-        PopulateOptions();
     }
 
     public void OnEnable()
@@ -117,10 +114,9 @@ public class Hangman : MonoBehaviour
                 {
                     print("You found a hidden code!");
                 }
-                else
+                else if(!gameOver)
                 {
                     StartCoroutine(CheckInput());
-                    print("Checking input");
                 }
             }
         }
@@ -136,12 +132,6 @@ public class Hangman : MonoBehaviour
         if (input.text.Length > 1)
         {
             StartCoroutine(textManager.TypeText(textOutput, "Input too long, please type only one symbol", true));
-            yield break;
-        }
-
-        if (textManager.isRunning)
-        {
-            print("TextManager is running");
             yield break;
         }
 
@@ -232,7 +222,7 @@ public class Hangman : MonoBehaviour
             outString += s + "\n";
         }
 
-        textManager.TypeText(imageOutput, outString, true);
+        StartCoroutine(textManager.TypeText(imageOutput, outString, true));
     }
 
     private void PopulateAnswers(string answer)

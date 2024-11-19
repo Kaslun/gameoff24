@@ -1,13 +1,8 @@
 using UnityEngine;
 using TMPro;
 using System;
-using UnityEngine.UI;
-using System.Threading.Tasks;
 using System.Collections;
-using UnityEngine.Rendering;
-using System.Linq;
-using Unity.VisualScripting;
-using System.Threading;
+
 
 public class CommandManager : MonoBehaviour
 {
@@ -21,18 +16,14 @@ public class CommandManager : MonoBehaviour
     private string errorMessage;
     [SerializeField]
     private string welcomeMessage = "Welcome to Corporate INC!";
-    [SerializeField]
+
     private string[] splitInput;
 
-    [SerializeField, Range(0,1)]
-    private float textSpeed = 0.1f;
     [SerializeField]
     private GameObject[] screens;
 
     [SerializeField]
     private HelpManager helpManager;
-    [SerializeField]
-    private Hangman hangmanManager;
     [SerializeField]
     private ScreenManager screenManager;
     [SerializeField]
@@ -40,13 +31,11 @@ public class CommandManager : MonoBehaviour
     [SerializeField]
     private ProgramManager programManager;
 
-    private bool lookingForGame = false;
     private bool isRunning = false;
 
     private void Start()
     {
         helpManager = FindFirstObjectByType<HelpManager>();
-        hangmanManager = FindFirstObjectByType<Hangman>();
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
         programManager = FindFirstObjectByType<ProgramManager>();
@@ -118,10 +107,6 @@ public class CommandManager : MonoBehaviour
     public void RunCommand(Commands command)
     {
         string outString = string.Empty;
-        print("Trying to run command");
-
-        if (splitInput.Length > 1)
-            print("Split input 1: " + splitInput[1]);
 
         switch (command)
         {
@@ -179,8 +164,6 @@ public class CommandManager : MonoBehaviour
 
     private Programs ParseProgram(string input)
     {
-        print(input);
-
         if (Enum.TryParse<Programs>(input, out Programs g))
         {
             return g;
@@ -213,7 +196,6 @@ public class CommandManager : MonoBehaviour
                 break;
         }
 
-        lookingForGame = false;
         input.text = "";
     }
 }

@@ -8,10 +8,8 @@ using System.Linq;
 
 public class ProgramManager : MonoBehaviour
 {
-    [SerializeField]
     public List<FileInfo> files = new List<FileInfo>();
 
-    [SerializeField]
     public List<DirectoryInfo> folders = new List<DirectoryInfo>();
 
     private string folderPath = Application.streamingAssetsPath;
@@ -25,7 +23,6 @@ public class ProgramManager : MonoBehaviour
     [SerializeField]
     private string hiddenFolderName;
 
-    [SerializeField]
     public string textFileContent;
 
     [SerializeField]
@@ -42,8 +39,6 @@ public class ProgramManager : MonoBehaviour
 
     [SerializeField]
     public int folderLayerCount = 0;
-
-    private bool breakFunction = false;
 
     private void Start()
     {
@@ -81,7 +76,8 @@ public class ProgramManager : MonoBehaviour
         }
         else
         {
-            extension = "dir";
+            StartCoroutine(textManager.TypeText(output, $"Could not find {name}", true));
+            return;
         }
 
         if (Enum.TryParse<FileType>(extension.ToLower(), out FileType fileType))
@@ -94,13 +90,13 @@ public class ProgramManager : MonoBehaviour
                 switch (fileType)
                 {
                     case FileType.txt:
-                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Read example.txt' to read text tiles", true));
+                        StartCoroutine(textManager.TypeText(output, $"Wrong command. Use 'Read {name}' to read the text file", true));
                         break;
                     case FileType.exe:
-                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Run example.exe' to read text tiles", true));
+                        StartCoroutine(textManager.TypeText(output, $"Wrong command. Use 'Run {name}' to run the program", true));
                         break;
                     case FileType.dir:
-                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Enter example.dir' to read text tiles", true));
+                        StartCoroutine(textManager.TypeText(output, $"Wrong command. Use 'Enter {name}' to enter the folder", true));
                         break;
                 }
             }
@@ -113,7 +109,6 @@ public class ProgramManager : MonoBehaviour
                         {
                             if (name.ToLower() == f.Name.ToLower())
                             {
-                                print("Textfile found!");
                                 string jointContent = string.Empty;
                                 string[] splitContent = textReader.ReadTextFile(input[0]);
 
@@ -135,22 +130,18 @@ public class ProgramManager : MonoBehaviour
                         {
                             if (name.ToLower() == f.Name.ToLower())
                             {
-                                print("Running program: " + input[0]);
                                 commandManager.RunProgram(input[0]);
                                 break;
                             }
-                            print("Running...");
                         }
                         StartCoroutine(textManager.TypeText(output, "Couldn't find program.", true));
                         break;
                     case FileType.dir:
-                        print("Checking folders...");
                         foreach (DirectoryInfo di in folders)
                         {
-                            if (di.Name.ToLower() == name.ToLower())
+                            if (di.Name.ToLower() == input[0].ToLower())
                             {
-                                print("Found folder: " + name);
-                                EnterFolder(name);
+                                EnterFolder(input[0]);
                             }
                         }
                         break;

@@ -15,6 +15,10 @@ public class WorkManager : MonoBehaviour
 
     [SerializeField]
     private string preFix = "Type: ";
+    [SerializeField]
+    private string postFix = "\n\nType 'exit' to leave.";
+    [SerializeField]
+    private string errorMessage = "Incorrect input. Your supervisor has been notified.";
 
     [SerializeField]
     private TextManager textManager;
@@ -23,8 +27,9 @@ public class WorkManager : MonoBehaviour
     [SerializeField]
     private ScreenManager screenManager;
 
-    private void Start()
+    private void OnDisable()
     {
+        StartCoroutine(textManager.TypeText(output, "", true));
     }
 
     private void OnEnable()
@@ -45,13 +50,18 @@ public class WorkManager : MonoBehaviour
         {
             if (Input.GetButtonDown("Submit"))
             {
+                if (input.text.ToLower() == "exit")
+                {
+                    screenManager.SwitchScreens(0);
+                }
+
                 if (input.text.ToLower() == currentWord.ToLower())
                 {
                     CorrectInput();
                 }
-                if (input.text.ToLower() == "exit")
+                else if(input.text.ToLower() != currentWord.ToLower())
                 {
-                    screenManager.SwitchScreens(0);
+                    WrongInput();
                 }
             }
 
@@ -64,9 +74,7 @@ public class WorkManager : MonoBehaviour
 
     private void PopulateWordList()
     {
-        print("Getting words");
         words = textReader.ReadTextFile(fileName);
-        print("Found " + words.Length + " words");
     }
     
     private string NewWord()
@@ -88,6 +96,15 @@ public class WorkManager : MonoBehaviour
         string newWord = NewWord();
         currentWord = newWord;
 
-        StartCoroutine(textManager.TypeText(output, preFix + newWord, true));
+        StartCoroutine(textManager.TypeText(output, preFix + newWord + postFix, true));
+    }
+
+    private void WrongInput()
+    {
+        input.text = string.Empty;
+        string newWord = NewWord();
+        currentWord = newWord;
+
+        StartCoroutine(textManager.TypeText(output, errorMessage + "\n" + preFix + newWord + postFix, true));
     }
 }

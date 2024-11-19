@@ -13,7 +13,13 @@ public class Hangman : MonoBehaviour
     private string[] answerOptions;
 
     [SerializeField]
-    private string fileName;
+    private string textFileName;
+
+    [SerializeField]
+    private string imageFileName;
+
+    [SerializeField]
+    private string folderName;
 
     [SerializeField]
     private TextMeshProUGUI[] textFields;
@@ -47,7 +53,9 @@ public class Hangman : MonoBehaviour
     [SerializeField]
     private TMP_InputField input;
     [SerializeField]
-    private TextMeshProUGUI output;
+    private TextMeshProUGUI textOutput;
+    [SerializeField]
+    private TextMeshProUGUI imageOutput;
 
     [SerializeField]
     private string wrongAnswers;
@@ -73,6 +81,7 @@ public class Hangman : MonoBehaviour
 
         input.text = "";
         wrongAnswers = "Wrong answers = ";
+        LoadImage();
         fails = 0;
         score = 0;
         gameOver = false;
@@ -126,7 +135,7 @@ public class Hangman : MonoBehaviour
 
         if (input.text.Length > 1)
         {
-            StartCoroutine(textManager.TypeText(output, "Input too long, please type only one symbol", true));
+            StartCoroutine(textManager.TypeText(textOutput, "Input too long, please type only one symbol", true));
             yield break;
         }
 
@@ -159,12 +168,14 @@ public class Hangman : MonoBehaviour
                 fails++;
                 wrongAnswers += input.text;
 
-                StartCoroutine(textManager.TypeText(output, wrongAnswers, true));
+                StartCoroutine(textManager.TypeText(textOutput, wrongAnswers, false));
                 while (textManager.isRunning)
                 {
-                    print("Writing text: " + output.name + " : " + wrongAnswers);
+                    print("Writing text: " + textOutput.name + " : " + wrongAnswers);
                     yield return new WaitForSeconds(.1f);
                 }
+
+                LoadImage();
 
                 StartCoroutine(CheckScore());
             }
@@ -181,13 +192,13 @@ public class Hangman : MonoBehaviour
 
         if (score >= currentAnswer.Length)
         {
-            StartCoroutine(textManager.TypeText(output, "You win! Type 'exit' to end the game", true));
+            StartCoroutine(textManager.TypeText(textOutput, "You win! Type 'exit' to end the game", true));
             gameOver = true;
         }
 
         if(fails >= maxFails)
         {
-            StartCoroutine(textManager.TypeText(output, "You lost... Type 'exit' to end the game", true));
+            StartCoroutine(textManager.TypeText(textOutput, "You lost... Type 'exit' to end the game", true));
             foreach(TextMeshProUGUI t in textFields)
             {
                 t.gameObject.SetActive(true);
@@ -207,7 +218,21 @@ public class Hangman : MonoBehaviour
 
     private void PopulateOptions()
     {
-        answerOptions = textReader.ReadTextFile(fileName);
+        answerOptions = textReader.ReadTextFile(textFileName);
+    }
+
+    private void LoadImage()
+    {
+        int pageNum = fails + 1;
+        string[] asciiArt = textReader.ReadTextFile(folderName + "/" + imageFileName + "_" + pageNum);
+        string outString = string.Empty;
+
+        foreach (string s in asciiArt)
+        {
+            outString += s + "\n";
+        }
+
+        textManager.TypeText(imageOutput, outString, true);
     }
 
     private void PopulateAnswers(string answer)

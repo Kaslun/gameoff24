@@ -14,7 +14,6 @@ public class ProgramManager : MonoBehaviour
     [SerializeField]
     public List<DirectoryInfo> folders = new List<DirectoryInfo>();
 
-    [SerializeField]
     private string folderPath = Application.streamingAssetsPath;
 
     [SerializeField]
@@ -44,6 +43,8 @@ public class ProgramManager : MonoBehaviour
     [SerializeField]
     public int folderLayerCount = 0;
 
+    private bool breakFunction = false;
+
     private void Start()
     {
         if (textReader == null)
@@ -61,17 +62,16 @@ public class ProgramManager : MonoBehaviour
             commandManager = FindFirstObjectByType<CommandManager>();
         }
 
-        folderPath += mainFolderName + "/";
+        folderPath += "/" + mainFolderName + "/";
         currentFolderName = mainFolderName;
         PopulateFiles();
 
     }
 
-    public void TryRunProgram(string name)
+    public void TryRunProgram(string name, FileType inputType )
     {
         string[] input = new string[2];
         string extension = string.Empty;
-        FileType fileType;
 
         if (name.Contains("."))
         {
@@ -84,78 +84,93 @@ public class ProgramManager : MonoBehaviour
             extension = "dir";
         }
 
-        if (Enum.TryParse<FileType>(extension.ToLower(), out fileType))
+        if (Enum.TryParse<FileType>(extension.ToLower(), out FileType fileType))
         {
             print("Parsed extension succesfully");
-            print("Extension = " + fileType.ToString());
+            print("Extension = " + inputType.ToString());
 
-            switch (fileType)
+            if (fileType != inputType)
             {
-                case FileType.txt:
-                    foreach (FileInfo f in files)
-                    {
-                        if (name.ToLower() == f.Name.ToLower())
+                switch (fileType)
+                {
+                    case FileType.txt:
+                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Read example.txt' to read text tiles", true));
+                        break;
+                    case FileType.exe:
+                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Run example.exe' to read text tiles", true));
+                        break;
+                    case FileType.dir:
+                        StartCoroutine(textManager.TypeText(output, "Wrong command. Use 'Enter example.dir' to read text tiles", true));
+                        break;
+                }
+            }
+            else
+            {
+                switch (inputType)
+                {
+                    case FileType.txt:
+                        foreach (FileInfo f in files)
                         {
-                            print("Textfile found!");
-                            string jointContent = string.Empty;
-                            string[] splitContent = textReader.ReadTextFile(input[0]);
-
-                            foreach (string c in splitContent)
+                            if (name.ToLower() == f.Name.ToLower())
                             {
-                                jointContent += c + "\n";
-                            }
+                                print("Textfile found!");
+                                string jointContent = string.Empty;
+                                string[] splitContent = textReader.ReadTextFile(input[0]);
 
-                            StartCoroutine(textManager.TypeText(output, jointContent, true));
+                                foreach (string c in splitContent)
+                                {
+                                    jointContent += c + "\n";
+                                }
+
+                                StartCoroutine(textManager.TypeText(output, jointContent, true));
+                            }
+                            else
+                            {
+                                StartCoroutine(textManager.TypeText(output, "Couldn't find file.", true));
+                            }
                         }
-                        else
+                        break;
+                    case FileType.exe:
+                        foreach (FileInfo f in files)
                         {
-                            StartCoroutine(textManager.TypeText(output, "Couldn't find file.", true));
+                            if (name.ToLower() == f.Name.ToLower())
+                            {
+                                print("Running program: " + input[0]);
+                                commandManager.RunProgram(input[0]);
+                                break;
+                            }
+                            print("Running...");
                         }
-                    }
-                    break;
-                case FileType.exe:
-                    foreach (FileInfo f in files)
-                    {
-                        if (name.ToLower() == f.Name.ToLower())
+                        StartCoroutine(textManager.TypeText(output, "Couldn't find program.", true));
+                        break;
+                    case FileType.dir:
+                        print("Checking folders...");
+                        foreach (DirectoryInfo di in folders)
                         {
-                            print("Running program: " + input[0]);
-                            commandManager.RunProgram(input[0]);
-                            break;
+                            if (di.Name.ToLower() == name.ToLower())
+                            {
+                                print("Found folder: " + name);
+                                EnterFolder(name);
+                            }
                         }
-                        print("Running...");
-                    }                       
-                    StartCoroutine(textManager.TypeText(output, "Couldn't find program.", true));
-                    break;
-                case FileType.dir:
-                    print("Checking folders...");
-                    foreach (DirectoryInfo di in folders)
-                    {
-                        if (di.Name.ToLower() == name.ToLower())
-                        {
-                            print("Found folder: " + name);
-                            EnterFolder(name);
-                        }
-                    }
-                    break;
+                        break;
+                }
             }
         }
-        else
-            print("Unable to parse");
     }
 
     public void EnterFolder(string folderName)
     {
-        folderPath += folderName + "/";
+        folderPath += "/" + folderName;
         PopulateFiles();
-        currentFolderName = folderName + "/";
+        currentFolderName += "/" + folderName;
         folderLayerCount++;
         commandManager.RunCommand(Commands.list);
     }
 
     public void ExitFolder()
     {
-        print("Removing folder name...");
-        folderPath = folderPath.Remove(folderPath.Length - currentFolderName.Length);
+        folderPath = folderPath.Remove(folderPath.Length - currentFolderName.Length + 1);
         folderLayerCount--;
         currentFolderName = mainFolderName;
         PopulateFiles();
@@ -180,16 +195,14 @@ public class ProgramManager : MonoBehaviour
 
         foreach(DirectoryInfo d in folders)
         {
-            print(d.Name);
             if(d.Extension != ".meta")
             {
-                fileList += d.Name + "      ";
+                fileList += d.Name + ".dir" + "      ";
             }
         }
 
         foreach(FileInfo f in files)
         {
-            print(f.Extension);
             if (f.Extension != ".meta")
             {
                 fileList += f.Name.ToLower() + "      ";
@@ -202,7 +215,6 @@ public class ProgramManager : MonoBehaviour
     public enum FileType
     {
         txt,
-        json,
         dir,
         exe
     }

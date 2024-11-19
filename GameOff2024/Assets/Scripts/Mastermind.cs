@@ -44,7 +44,7 @@ public class Mastermind : MonoBehaviour
         gameOver = false;
         fails = 0;
         GenerateNumber();
-        StartCoroutine(textManager.TypeText(output, "Welcome to Mastermind! Try to guess the correct 4-digit number in 5 tries\n'^' means higher\n'v' means lower\n'o means you have the correct number", true));
+        StartCoroutine(textManager.TypeText(output, "Welcome to Mastermind! Try to guess the correct 4-digit number in 5 tries\n'^' = higher\n'v' = lower\n'o = correct input\n", true));
     }
 
     private void GenerateNumber()
@@ -82,7 +82,6 @@ public class Mastermind : MonoBehaviour
                 else
                 {
                     CheckInput();
-                    print("Checking input");
                 }
             }
         }
@@ -91,7 +90,9 @@ public class Mastermind : MonoBehaviour
     private void CheckInput()
     {
         if (input.text.Length > 4 || input.text.Length < 4)
-            StartCoroutine(textManager.TypeText(output, "Input must be a 4-digit number", true));
+            return;
+
+        bool shouldBreak = false;
 
         List<int> codeInput = new List<int>();
         symbols = string.Empty;
@@ -104,10 +105,13 @@ public class Mastermind : MonoBehaviour
             }
             else
             {
-                StartCoroutine(textManager.TypeText(output, "Input must be a 4-digit number", true));
+                shouldBreak = true;
                 break;
             }
         }
+
+        if (shouldBreak)
+            return;
 
         for(int i = 0; i < codeInput.Count; i++)
         {
@@ -125,7 +129,7 @@ public class Mastermind : MonoBehaviour
             }
         }
 
-        StartCoroutine(textManager.TypeText(output, symbols, false));
+        StartCoroutine(textManager.TypeText(output, input.text + " | " + symbols, false));
         StartCoroutine(CheckScore());
 
     }
@@ -139,13 +143,13 @@ public class Mastermind : MonoBehaviour
 
         if (symbols == "oooo")
         {
-            StartCoroutine(textManager.TypeText(output, "You win! Type 'exit' to end the game", true));
+            StartCoroutine(textManager.TypeText(output, "\nYou win! Type 'exit' to end the game", false));
             gameOver = true;
         }
 
         if (fails >= maxFails)
         {
-            StartCoroutine(textManager.TypeText(output, "You lost... Type 'exit' to end the game", true));
+            StartCoroutine(textManager.TypeText(output, "\nYou lost... Type 'exit' to end the game", false));
             gameOver = true;
         }
 

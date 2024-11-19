@@ -38,8 +38,6 @@ public class CommandManager : MonoBehaviour
     [SerializeField]
     private TextManager textManager;
     [SerializeField]
-    private ProgramManager folderManager;
-    [SerializeField]
     private ProgramManager programManager;
 
     private bool lookingForGame = false;
@@ -51,14 +49,12 @@ public class CommandManager : MonoBehaviour
         hangmanManager = FindFirstObjectByType<Hangman>();
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
-        folderManager = FindFirstObjectByType<ProgramManager>();
         programManager = FindFirstObjectByType<ProgramManager>();
         input.resetOnDeActivation = true;
     }
 
     private void OnDisable()
     {
-        print("Commands are disabled");
         isRunning = false;
     }
 
@@ -76,7 +72,6 @@ public class CommandManager : MonoBehaviour
         RunCommand(Commands.welcome);
         input.ActivateInputField();
         isRunning = true;
-        print("Enabled commands");
     }
 
     private void Update()
@@ -137,7 +132,13 @@ public class CommandManager : MonoBehaviour
                 if (splitInput.Length <= 1)
                     outString = errorMessage;
                 else
-                    programManager.TryRunProgram(splitInput[1]);
+                    programManager.TryRunProgram(splitInput[1], ProgramManager.FileType.exe);
+                break;
+            case Commands.read:
+                if (splitInput.Length <= 1)
+                    outString = errorMessage;
+                else
+                    programManager.TryRunProgram(splitInput[1], ProgramManager.FileType.txt);
                 break;
             case Commands.exit:
                 if(programManager.folderLayerCount >= 1)
@@ -146,7 +147,13 @@ public class CommandManager : MonoBehaviour
                 }
                 break;
             case Commands.list:
-                outString = "Programs in '" + folderManager.currentFolderName + "':\n" + folderManager.GetFileList();
+                outString = "Programs in '" + programManager.currentFolderName + "':\n" + programManager.GetFileList();
+                break;
+            case Commands.enter:
+                if (splitInput.Length <= 1)
+                    outString = errorMessage;
+                else
+                    programManager.TryRunProgram(splitInput[1], ProgramManager.FileType.dir);
                 break;
             case Commands.error:
                 outString = errorMessage;
@@ -216,7 +223,9 @@ public enum Commands
     help,
     exit,
     run,
+    enter,
     list,
+    read,
     error,
     welcome
 }

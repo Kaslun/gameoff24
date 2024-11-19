@@ -75,6 +75,8 @@ public class Mastermind : MonoBehaviour
 
             else
             {
+                if (gameOver)
+                    return;
                 if (hiddenCodes.Contains<string>(input.text))
                 {
                     print("You found a hidden code!");

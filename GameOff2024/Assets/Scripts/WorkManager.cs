@@ -74,7 +74,7 @@ public class WorkManager : MonoBehaviour
 
     private void PopulateWordList()
     {
-        words = textReader.ReadTextFile(fileName);
+        words = textReader.ReadTextFile(fileName, Application.streamingAssetsPath);
     }
     
     private string NewWord()

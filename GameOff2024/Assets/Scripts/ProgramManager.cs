@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class ProgramManager : MonoBehaviour
 {
@@ -38,29 +39,24 @@ public class ProgramManager : MonoBehaviour
     private CommandManager commandManager;
 
     [SerializeField]
+    private LockManager lockManager;
+
+    [SerializeField]
     public int folderLayerCount = 0;
+
+    public string fileList;
 
     private void Start()
     {
-        if (textReader == null)
-        {
-            textReader = FindFirstObjectByType<TextReader>();
-        }
 
-        if (textManager == null)
-        {
-            textManager = FindFirstObjectByType<TextManager>();
-        }
-
-        if (commandManager == null)
-        {
-            commandManager = FindFirstObjectByType<CommandManager>();
-        }
+        textReader = FindFirstObjectByType<TextReader>();
+        textManager = FindFirstObjectByType<TextManager>();
+        commandManager = FindFirstObjectByType<CommandManager>();
+        lockManager = FindFirstObjectByType<LockManager>();
 
         folderPath += "/" + mainFolderName + "/";
         currentFolderName = mainFolderName;
         PopulateFiles();
-
     }
 
     public void TryRunProgram(string name, FileType inputType )
@@ -73,6 +69,11 @@ public class ProgramManager : MonoBehaviour
             input = name.Split(".".ToCharArray()[0]);
             extension = input[1];
             print(extension);
+
+            if(inputType == FileType.dir && extension == "enc")
+            {
+                inputType = FileType.enc;
+            }
         }
         else
         {
@@ -87,6 +88,7 @@ public class ProgramManager : MonoBehaviour
 
             if (fileType != inputType)
             {
+                print("Checking if wrong filetype");
                 switch (fileType)
                 {
                     case FileType.txt:
@@ -98,10 +100,14 @@ public class ProgramManager : MonoBehaviour
                     case FileType.dir:
                         StartCoroutine(textManager.TypeText(output, $"Wrong command. Use 'Enter {name}' to enter the folder", true));
                         break;
+                    case FileType.enc:
+                        StartCoroutine(textManager.TypeText(output, $"Wrong command. Use 'Enter {name}' to enter the folder", true));
+                        break;
                 }
             }
             else
             {
+                print("Checking input type on switch");
                 switch (inputType)
                 {
                     case FileType.txt:
@@ -110,7 +116,7 @@ public class ProgramManager : MonoBehaviour
                             if (name.ToLower() == f.Name.ToLower())
                             {
                                 string jointContent = string.Empty;
-                                string[] splitContent = textReader.ReadTextFile(input[0]);
+                                string[] splitContent = textReader.ReadTextFile(f.Name.ToLower(), folderPath);
 
                                 foreach (string c in splitContent)
                                 {
@@ -137,11 +143,21 @@ public class ProgramManager : MonoBehaviour
                         StartCoroutine(textManager.TypeText(output, "Couldn't find program.", true));
                         break;
                     case FileType.dir:
+                        EnterFolder(input[0]);
+                        break; 
+                    case FileType.enc:
                         foreach (DirectoryInfo di in folders)
                         {
-                            if (di.Name.ToLower() == input[0].ToLower())
+                            if (di.Name.ToLower() == name.ToLower())
                             {
-                                EnterFolder(input[0]);
+                                print("Checking if folder is locked");
+                                if (lockManager.IsFolderLocked(name.ToLower()))
+                                {
+                                    print("Folder is locked");
+                                    commandManager.isWaitingForPassword = true;
+                                    StartCoroutine(textManager.TypeText(output, "Type in password...", true));
+                                }
+                                break;
                             }
                         }
                         break;
@@ -154,14 +170,14 @@ public class ProgramManager : MonoBehaviour
     {
         folderPath += "/" + folderName;
         PopulateFiles();
-        currentFolderName += "/" + folderName;
+        currentFolderName = folderName;
         folderLayerCount++;
         commandManager.RunCommand(Commands.list);
     }
 
     public void ExitFolder()
     {
-        folderPath = folderPath.Remove(folderPath.Length - currentFolderName.Length + 1);
+        folderPath = folderPath.Remove(folderPath.Length - currentFolderName.Length);
         folderLayerCount--;
         currentFolderName = mainFolderName;
         PopulateFiles();
@@ -170,43 +186,67 @@ public class ProgramManager : MonoBehaviour
 
     private void PopulateFiles()
     {
+        print("folderpath = " +  folderPath);
         DirectoryInfo dirInfo = new DirectoryInfo(folderPath);
 
         files = dirInfo.GetFiles().ToList<FileInfo>();
         folders = dirInfo.GetDirectories().ToList<DirectoryInfo>();
+
+        GetFileList();
     }
 
-    public string GetFileList()
+    public void GetFileList()
     {
         if(files.Count <= 0)
         {
             PopulateFiles();
         }
-        string fileList = string.Empty;
+
+        fileList = string.Empty;
+
+        List<Folder> lockedFolderList = new List<Folder>();
 
         foreach(DirectoryInfo d in folders)
         {
             if(d.Extension != ".meta")
             {
-                fileList += d.Name + ".dir" + "      ";
+                if(d.Extension == ".enc")
+                {
+                    Folder f = new();
+                    f.name = d.Name.ToLower();
+                    f.isLocked = true;
+                    string password = folderPath + d.Name + "/" + d.GetFiles()[0].Name;
+                    f.password = textReader.ReadTextFile(password, folderPath + d.Name + "/")[0];
+
+                    print("Adding folder: " + f.name);
+                    lockedFolderList.Add(f);
+
+                    fileList += d.Name + "      ";
+                }
+                else
+                {
+                    fileList += d.Name + ".dir" + "      ";
+
+                }
             }
         }
 
+        lockManager.PopulateFolderList(lockedFolderList.ToArray());
+
         foreach(FileInfo f in files)
         {
-            if (f.Extension != ".meta")
+            if (f.Extension != ".meta" && f.Name != "password.txt")
             {
                 fileList += f.Name.ToLower() + "      ";
             }
         }
-
-        return fileList;
     }
 
     public enum FileType
     {
         txt,
         dir,
+        enc,
         exe
     }
         

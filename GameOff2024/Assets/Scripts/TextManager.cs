@@ -6,8 +6,6 @@ using Unity.VisualScripting;
 
 public class TextManager : MonoBehaviour
 {
-    [SerializeField]
-    private float textSpeed = 0.03f;
     public bool isRunning = false;
 
     public IEnumerator TypeText(TextMeshProUGUI outputField, string stringOut, bool deleteTextFirst)
@@ -18,7 +16,7 @@ public class TextManager : MonoBehaviour
 
             while (isRunning)
             {
-                yield return new WaitForSeconds(.1f);
+                yield return new WaitForSecondsRealtime(.5f);
             }
         }
         else
@@ -27,10 +25,11 @@ public class TextManager : MonoBehaviour
         }
 
         isRunning = true;
+
         foreach (char c in stringOut)
         {
             outputField.text += c;
-            yield return new WaitForSeconds(.03f);
+            yield return new WaitForSecondsRealtime(.03f);
         }
         isRunning = false;
     }
@@ -44,7 +43,7 @@ public class TextManager : MonoBehaviour
         {
             outString = outString.Remove(outString.Length - 1);
             output.text = outString;
-            yield return new WaitForSeconds(outString.Length / 100);
+            yield return new WaitForSecondsRealtime(.01f);
         }
         isRunning = false;
     }

@@ -3,18 +3,12 @@ using UnityEngine;
 
 public class TextReader : MonoBehaviour
 {
-    private string filePath = Application.streamingAssetsPath;
-
-    public string[] ReadTextFile(string fileName)
+    public string[] ReadTextFile(string fileName, string filePath)
     {
-        string[] fileContent = File.ReadAllLines(Path.Combine(filePath, fileName + ".txt"));
+        print("Trying to read file: " +  fileName);
+
+        string[] fileContent = File.ReadAllLines(Path.Combine(filePath, fileName));
 
         return fileContent;
-    }
-
-    public string[] ReadJSONFile(string fileName)
-    {
-
-        return null;
     }
 }

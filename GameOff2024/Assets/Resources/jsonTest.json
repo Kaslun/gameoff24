@@ -1,0 +1,72 @@
+{
+  "rooms": [
+    {
+      "name": "Living Room",
+      "description": "A cozy living room with a fireplace and a large sofa.",
+      "connectedRooms": [ "Kitchen", "Bedroom" ],
+      "items": [
+        {
+          "name": "Remote Control",
+          "description": "A remote control for the TV.",
+          "canBeUsedOn": "Television"
+        },
+        {
+          "name": "Book",
+          "description": "A mystery novel left on the coffee table.",
+          "canBeUsedOn": ""
+        }
+      ]
+    },
+    {
+      "name": "Kitchen",
+      "description": "A modern kitchen with stainless steel appliances and a dining table.",
+      "connectedRooms": [ "Living Room", "Bathroom" ],
+      "items": [
+        {
+          "name": "Knife",
+          "description": "A sharp kitchen knife.",
+          "canBeUsedOn": "Fruit"
+        },
+        {
+          "name": "Plate",
+          "description": "A clean white ceramic plate.",
+          "canBeUsedOn": ""
+        }
+      ]
+    },
+    {
+      "name": "Bedroom",
+      "description": "A small bedroom with a neatly made bed and a wooden wardrobe.",
+      "connectedRooms": [ "Living Room" ],
+      "items": [
+        {
+          "name": "Key",
+          "description": "A small metal key.",
+          "canBeUsedOn": "Wardrobe"
+        },
+        {
+          "name": "Alarm Clock",
+          "description": "An alarm clock set to 7:00 AM.",
+          "canBeUsedOn": ""
+        }
+      ]
+    },
+    {
+      "name": "Bathroom",
+      "description": "A clean bathroom with a shower and a mirror.",
+      "connectedRooms": [ "Kitchen" ],
+      "items": [
+        {
+          "name": "Toothbrush",
+          "description": "A blue toothbrush with soft bristles.",
+          "canBeUsedOn": ""
+        },
+        {
+          "name": "Towel",
+          "description": "A fluffy white towel.",
+          "canBeUsedOn": ""
+        }
+      ]
+    }
+  ]
+}

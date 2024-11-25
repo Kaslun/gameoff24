@@ -30,8 +30,11 @@ public class CommandManager : MonoBehaviour
     private TextManager textManager;
     [SerializeField]
     private ProgramManager programManager;
+    [SerializeField]
+    private LockManager lockManager;
 
     private bool isRunning = false;
+    public bool isWaitingForPassword = false;
 
     private void Start()
     {
@@ -39,12 +42,8 @@ public class CommandManager : MonoBehaviour
         screenManager = FindFirstObjectByType<ScreenManager>();
         textManager = FindFirstObjectByType<TextManager>();
         programManager = FindFirstObjectByType<ProgramManager>();
+        lockManager = FindFirstObjectByType<LockManager>();
         input.resetOnDeActivation = true;
-    }
-
-    private void OnDisable()
-    {
-        isRunning = false;
     }
 
     private void OnEnable()
@@ -60,24 +59,29 @@ public class CommandManager : MonoBehaviour
         }
         RunCommand(Commands.welcome);
         input.ActivateInputField();
-        isRunning = true;
     }
 
     private void Update()
     {
-        if (!isRunning)
-        {
-            return;
-        }
-
         if (!input.isFocused && !textManager.isRunning)
         {
+            print("Focusing input field");
             input.ActivateInputField();
         }
 
         if (Input.GetButtonDown("Submit") && !textManager.isRunning)
         {
-            StartCoroutine(SubmitCommand());
+            if (isWaitingForPassword)
+            {
+                print("Waiting for password");
+                lockManager.TryUnlockFolder(input.text.ToLower());
+                isWaitingForPassword = false;
+            }
+            else
+            {
+                print("Submitting command");
+                StartCoroutine(SubmitCommand());
+            }
         }
     }
 
@@ -108,6 +112,8 @@ public class CommandManager : MonoBehaviour
     {
         string outString = string.Empty;
 
+        print("Running command");
+
         switch (command)
         {
             case Commands.help:
@@ -132,7 +138,7 @@ public class CommandManager : MonoBehaviour
                 }
                 break;
             case Commands.list:
-                outString = "Programs in '" + programManager.currentFolderName + "':\n" + programManager.GetFileList();
+                outString = "Programs in '" + programManager.currentFolderName + "':\n" + programManager.fileList;
                 break;
             case Commands.enter:
                 if (splitInput.Length <= 1)
@@ -194,6 +200,9 @@ public class CommandManager : MonoBehaviour
             case Programs.mastermind:
                 screenManager.SwitchScreens(3);
                 break;
+            case Programs.zork:
+                screenManager.SwitchScreens(4);
+                break;
         }
 
         input.text = "";
@@ -218,5 +227,6 @@ public enum Programs
     mastermind,
     globalthermalnuclearwarfare,
     error,
+    zork,
     work
 }

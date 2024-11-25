@@ -21,6 +21,8 @@ public class Hangman : MonoBehaviour
     [SerializeField]
     private string folderName;
 
+    private string folderPath;
+
     [SerializeField]
     private TextMeshProUGUI[] textFields;
 
@@ -62,19 +64,15 @@ public class Hangman : MonoBehaviour
     [SerializeField]
     private string correctAnswers;
 
-    private bool gameOver;
+    private string previousGuesses;
 
-    private void Start()
-    {
-        screenManager = FindFirstObjectByType<ScreenManager>();
-        textManager = FindFirstObjectByType<TextManager>();
-        textReader = FindFirstObjectByType<TextReader>();
-    }
+    private bool gameOver;
 
     public void OnEnable()
     {
-        PickRandomAnswer();
+        folderPath = Application.streamingAssetsPath + "/" + folderName;
         PopulateOptions();
+        PickRandomAnswer();
 
         input.text = "";
         wrongAnswers = "Wrong answers = ";
@@ -82,6 +80,7 @@ public class Hangman : MonoBehaviour
         fails = 0;
         score = 0;
         gameOver = false;
+        previousGuesses = string.Empty;
     }
 
     private void PickRandomAnswer()
@@ -93,16 +92,13 @@ public class Hangman : MonoBehaviour
 
     private void Update()
     {
-        if (textManager.isRunning)
-        {
-            return;
-        }
-        if (!input.isFocused)
+        print("hangman is running");
+        if (!input.isFocused && !textManager.isRunning)
         {
             input.ActivateInputField();
         }
 
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") && !textManager.isRunning)
         {
             if (CommandManager.ParseCommand(input.text) == Commands.exit)
             {
@@ -137,7 +133,12 @@ public class Hangman : MonoBehaviour
 
         char c = input.text.ToLower().ToCharArray()[0];
 
-        if (currentAnswer.Contains<char>(c))
+        if (previousGuesses.Contains(c))
+            yield break;
+
+        previousGuesses += c;
+
+        if (currentAnswer.Contains(c))
         {
             print("Guessed correct!");
             for (int i = 0; i < currentAnswer.Length; i++)
@@ -152,7 +153,7 @@ public class Hangman : MonoBehaviour
         }
         else
         {
-            if (wrongAnswers.Contains<char>(input.text[0]))
+            if (wrongAnswers.Contains(input.text[0]))
             {
                 print("Incorrect guess");
                 fails++;
@@ -208,13 +209,15 @@ public class Hangman : MonoBehaviour
 
     private void PopulateOptions()
     {
-        answerOptions = textReader.ReadTextFile(textFileName);
+        print("Loading answers: " + folderPath + "/" + textFileName);
+        answerOptions = textReader.ReadTextFile(textFileName, folderPath);
     }
 
     private void LoadImage()
     {
         int pageNum = fails + 1;
-        string[] asciiArt = textReader.ReadTextFile(folderName + "/" + imageFileName + "_" + pageNum);
+        print("Loading image: " + folderPath + "/"+ imageFileName + "_" + pageNum + ".txt");
+        string[] asciiArt = textReader.ReadTextFile(imageFileName + "_" + pageNum + ".txt", folderPath);
         string outString = string.Empty;
 
         foreach (string s in asciiArt)

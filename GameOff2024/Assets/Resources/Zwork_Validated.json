@@ -1,0 +1,71 @@
+
+{
+    "Rooms": {
+        "Welcome": {
+            "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned."
+        },
+        "Your Desk": {
+            "description": "You are standing by your desk. The sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.",
+            "objects": [
+                {
+                    "name": "Under Desk",
+                    "description": "Looking under your desk reveals a Blue Puzzle Piece.",
+                    "giveItem": "Blue Puzzle Piece"
+                }
+            ]
+        },
+        "Coffee Machine": {
+            "description": "Like an oasis in the desert, the coffee machine is a beacon of hope.",
+            "objects": [
+                {
+                    "name": "Trolley",
+                    "description": "A shaky trolley containing a few items.",
+                    "giveItem": "Red Puzzle Piece"
+                },
+                {
+                    "name": "Coffee Machine",
+                    "description": "The machine is ready to brew if you have a cup.",
+                    "needItem": "Cup",
+                    "giveItem": "FullCup"
+                }
+            ]
+        },
+        "Office Entrance": {
+            "description": "In the darkness, you sense it. Freedom. So close.",
+            "objects": [
+                {
+                    "name": "Doormat",
+                    "description": "Checking under the doormat reveals a Green Puzzle Piece.",
+                    "giveItem": "Green Puzzle Piece"
+                }
+            ]
+        },
+        "Superior Section": {
+            "description": "The gates of corporate power.",
+            "objects": [
+                {
+                    "name": "Potted Plant",
+                    "description": "The plant seems dry.",
+                    "needItem": "FullCup",
+                    "giveItem": "Cyan Puzzle Piece"
+                },
+                {
+                    "name": "Floppy Receptacle",
+                    "description": "It looks like it accepts a floppy disk.",
+                    "needItem": "All Puzzle Pieces",
+                    "giveItem": "Floppy"
+                }
+            ]
+        },
+        "Home": {
+            "description": "Your cozy home, a place of safety.",
+            "objects": [
+                {
+                    "name": "Markie",
+                    "description": "Your dog Markie wags their tail happily.",
+                    "interactTwiceGiveItem": "Yellow Puzzle Piece"
+                }
+            ]
+        }
+    }
+}

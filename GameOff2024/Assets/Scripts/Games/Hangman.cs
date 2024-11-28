@@ -213,7 +213,7 @@ public class Hangman : MonoBehaviour
 
         if (score >= currentAnswer.Length)
         {
-            StartCoroutine(textManager.TypeText(textOutput, "You win! Type 'exit' to end the game\n<color=#008000>Password = mastermind</color>", true));
+            StartCoroutine(textManager.TypeText(textOutput, "You win! Type 'exit' to end the game\n<color=#008000>Password = frustrated</color>", true));
             gameOver = true;
         }
 

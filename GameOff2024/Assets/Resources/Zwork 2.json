@@ -27,7 +27,7 @@
 				"description": "for old times' sake, you take a quick peek under your desk. The calendar hangs in the corner, and the crime novel you never got to finish is currently supporting one of the legs on the desk. \n Something's different, though. right below your chair lies a blue corner-piece of a puzzle, with the text 'O:roomPos the' written in very fine print on it. \n You pick it up - why not?",
 				"objects": [
 					{
-						"name": "Blue Puzzle Piece",
+						"name": "BluePuzzle",
 						"description_inactive": "",
 						"description_activated": "",
 						"canBeUsedOn": "Terminal",
@@ -60,14 +60,16 @@
 				"description_inactive": "The Trolley contains three cups, nine tea spoons and one packet of sweetener. \n From experience, you know that milk and other condiments must be brought from home... But given the lack of storage after what HR has labeled 'the incident', few choose to bring milk outside of the winter months. \n You take a coffee cup from the Trolley, which causes it to lose balance and shake uncontrollably. You briefly think to report to HR that a Wheel on the Trolley might be in disrepair, but then you remember that 1) they would not lift a finger to solve it, and 2) this will soon no longer be your problem.",
 				"description_activated": "The Trolley contains three cups, nine tea spoons and one packet of sweetener. \n From experience, you know that milk and other condiments must be brought from home... But given the lack of storage after what HR has labeled 'the incident', few choose to bring milk outside of the winter months. \n The Trolley is still shaking uncontrollably. You briefly think to report to HR that a Wheel on the Trolley might be in disrepair, but then you remember that 1) they would not lift a finger to solve it, and 2) the Trolley will soon no longer be your problem.",
 				"canBeUsedOn": "",
-				"needItem": "";
+				"needItem": "",
+				"giveItem": ""
 			},
 			{
 				"name": "Cup",
 				"description_inactive": "There is nothing in your coffee cup. You should put something appropriate in there.",
 				"description_activated": "",
 				"canBeUsedOn": "Coffee Machine",
-				"needItem": "";
+				"needItem": "",
+				"giveItem": ""
 			}
 		],
 		"look_actions": [
@@ -81,11 +83,12 @@
 				"description": "you take a closer look at the vibrating wheel. While helpfully poking it with the packet of sweetener, a red puzzle piece flies out of the spokes, riccocheting around the room - but thankfully missing the all-important coffee tubes. When you take a closer look at it, you see that 'R:trolley Trolley' is printed on it. \n Since you can, you pick it up.",
 				"objects": [
 					{
-						"name": "Red Puzzle Piece",
+						"name": "RedPuzzle",
 						"description_inactive": "",
 						"description_activated": "",
 						"canBeUsedOn": "Puzzle",
-						"needItem": ""
+						"needItem": "",
+						"giveItem": ""
 					}
 				]
 			}
@@ -130,7 +133,8 @@
 						"description_inactive": "",
 						"description_activated": "",
 						"canBeUsedOn": "Puzzle",
-						"needItem": "";
+						"needItem": "",
+						"giveItem": ""
 					}
 				]
 			}
@@ -148,7 +152,7 @@
 				"description_already_activated": "Poor plant. It deserved better.",
 				"canBeUsedOn": "",
 				"needItem": "FullCup",
-				"giveItem": "Cyan Puzzle Piece"
+				"giveItem": "CyanPuzzle"
 			},
 			{
 				"name": "Floppy Receptacle",

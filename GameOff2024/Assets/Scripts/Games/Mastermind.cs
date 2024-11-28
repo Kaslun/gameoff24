@@ -145,7 +145,7 @@ public class Mastermind : MonoBehaviour
 
         if (symbols == "oooo")
         {
-            StartCoroutine(textManager.TypeText(output, "\nYou win! Type 'exit' to end the game", false));
+            StartCoroutine(textManager.TypeText(output, "\nYou win! Type 'exit' to end the game\n<color=#008000>password = infuriated</color>\n", false));
             gameOver = true;
         }
 

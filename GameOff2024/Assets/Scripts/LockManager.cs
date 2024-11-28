@@ -43,9 +43,10 @@ public class LockManager : MonoBehaviour
 
     public void TryUnlockFolder(string password)
     {
-        print("Trying to unlock folder");
+
         foreach (Folder f in folderList)
         {
+            print("Trying to unlock folder: " + f.name);
             if (f.name.ToLower().Equals(folderToUnlock.ToLower()) && f.password.ToLower().Equals(password.ToLower()))
             {
                 print("Entering locked folder: " + f.name);

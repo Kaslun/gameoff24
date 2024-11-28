@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class WorkManager : MonoBehaviour
     [SerializeField]
     private string fileName;
     private string currentWord = "Hello";
+    private int counter = 0;
     public string[] words;
 
     [SerializeField]
@@ -19,6 +21,8 @@ public class WorkManager : MonoBehaviour
     private string postFix = "\n\nType 'exit' to leave.";
     [SerializeField]
     private string errorMessage = "Incorrect input. Your supervisor has been notified.";
+    [SerializeField]
+    private string secretWord;
 
     [SerializeField]
     private TextManager textManager;
@@ -34,6 +38,7 @@ public class WorkManager : MonoBehaviour
 
     private void OnEnable()
     {
+        counter = 0;
         if (words.Length <= 0)
         {
             PopulateWordList();
@@ -55,12 +60,19 @@ public class WorkManager : MonoBehaviour
                     screenManager.SwitchScreens(0);
                 }
 
+                if(input.text.ToLower() == "catharsis".ToLower())
+                {
+                    CommandManager.ParseCommand("shutdown");
+                }
+
                 if (input.text.ToLower() == currentWord.ToLower())
                 {
                     CorrectInput();
                 }
                 else if(input.text.ToLower() != currentWord.ToLower())
                 {
+                    print("Wrong... input was: " + input.text.ToLower());
+                    print("Current word is: " + currentWord.ToLower());
                     WrongInput();
                 }
             }
@@ -82,7 +94,14 @@ public class WorkManager : MonoBehaviour
         int rndNum = Random.Range(0, words.Length);
         string newWord = words[rndNum];
 
-        while (newWord == currentWord)
+        counter++;
+
+        if(counter % 5 == 0)
+        {
+            return secretWord;
+        }
+
+        while (newWord.ToLower() == currentWord.ToLower())
         {
             newWord = words[rndNum];
         }
@@ -96,7 +115,17 @@ public class WorkManager : MonoBehaviour
         string newWord = NewWord();
         currentWord = newWord;
 
-        StartCoroutine(textManager.TypeText(output, preFix + newWord + postFix, true));
+
+        if (currentWord.ToLower() == secretWord.ToLower())
+        {
+            print("Currentwork is the secret word");
+            string colorWord = "<color=#008000>" + secretWord + "</color>";
+            StartCoroutine(textManager.TypeText(output, preFix + colorWord + postFix, true));
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, preFix + currentWord + postFix, true));
+        }
     }
 
     private void WrongInput()
@@ -105,6 +134,16 @@ public class WorkManager : MonoBehaviour
         string newWord = NewWord();
         currentWord = newWord;
 
-        StartCoroutine(textManager.TypeText(output, errorMessage + "\n" + preFix + newWord + postFix, true));
+
+        if (currentWord.ToLower() == secretWord.ToLower())
+        {
+            print("Currentwork is the secret word");
+            string colorWord = "<color=#008000>" + secretWord + "</color>";
+            StartCoroutine(textManager.TypeText(output, preFix + colorWord + postFix, true));
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, preFix + currentWord + postFix, true));
+        }
     }
 }

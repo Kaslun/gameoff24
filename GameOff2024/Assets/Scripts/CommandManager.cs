@@ -152,6 +152,11 @@ public class CommandManager : MonoBehaviour
             case Commands.welcome:
                 outString = welcomeMessage;
                 break;
+            case Commands.shutdown:
+                if (splitInput[0] == "shutdown")
+                    break;
+                screenManager.SwitchScreens(5);
+                break;
         }
 
         StartCoroutine(textManager.TypeText(output, outString, true));
@@ -200,7 +205,7 @@ public class CommandManager : MonoBehaviour
             case Programs.mastermind:
                 screenManager.SwitchScreens(3);
                 break;
-            case Programs.zork:
+            case Programs.zwork:
                 screenManager.SwitchScreens(4);
                 break;
         }
@@ -218,6 +223,7 @@ public enum Commands
     list,
     read,
     error,
+    shutdown,
     welcome
 }
 
@@ -227,6 +233,6 @@ public enum Programs
     mastermind,
     globalthermalnuclearwarfare,
     error,
-    zork,
+    zwork,
     work
 }

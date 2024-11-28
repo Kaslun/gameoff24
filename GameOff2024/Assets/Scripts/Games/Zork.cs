@@ -19,38 +19,45 @@ public class Zork : MonoBehaviour
     private TextAsset jsonFile;
 
     [SerializeField]
-    public Rooms roomsInJSON;
-
-    [SerializeField]
-    private List<Items> itemsInRoom;
+    public ZorkData zorkData;
 
     [SerializeField]
     private Room currentRoom;
 
     [SerializeField]
-    private int currentRoomNumber = 0;
-
-    [SerializeField]
     private TextManager textManager;
 
-    public List<Items> inventory;
+    public Dictionary<string, bool> inventoryStates;
 
     private void OnEnable()
     {
         if (jsonFile == null)
         {
             jsonFile = Resources.Load<TextAsset>(fileName);
-            PopulateRooms();
+            print("jsonfile = " + jsonFile.name);
         }
 
-        TryEnterRoom(roomsInJSON.rooms[0].name);
+        LoadZorkData();
+        TryEnterRoom(zorkData.rooms[0].name);
     }
 
-    private void PopulateRooms()
+    private void LoadZorkData()
     {
-        print("Populating rooms");
-        roomsInJSON = JsonUtility.FromJson<Rooms>(jsonFile.text);
-        print("Num of rooms: " + roomsInJSON.rooms.Length);
+        print("Loading Zork data");
+        zorkData = JsonUtility.FromJson<ZorkData>(jsonFile.text);
+        print("Num of rooms: " + zorkData.rooms.Length);
+
+    }
+
+    private void InitializeInventory()
+    {
+        inventoryStates = new Dictionary<string, bool>();
+        InitializeInventory();
+
+        foreach (var item in zorkData.inventory)
+        {
+            inventoryStates[item.name] = false; // Default all items to "not owned"
+        }
     }
 
     private void Update()
@@ -79,55 +86,114 @@ public class Zork : MonoBehaviour
                     TryEnterRoom(inputText[1]);
                     break;
                 case ZorkCommands.take:
-                    foreach (Items i in itemsInRoom)
-                    {
-                        if (i.name.ToLower() == inputText[1].ToLower())
-                        {
-                            inventory.Add(i);
-                            itemsInRoom.Remove(i);
-                            string itemText = "You take the " + i.name;
-                            StartCoroutine(textManager.TypeText(output, itemText, true));
-                            break;
-                        }
-                    }
+                    TryTakeItem(inputText[1]);
                     break;
                 case ZorkCommands.look:
-                    string descText = currentRoom.description;
-                    StartCoroutine(textManager.TypeText(output, descText, true));
+                    DisplayRoomDescription();
                     break;
-
+                case ZorkCommands.inventory:
+                    DisplayInventory();
+                    break;
+                case ZorkCommands.use:
+                    TryUseItem(inputText[1]);
+                    break;
             }
         }
     }
 
     private void TryEnterRoom(string newRoom)
     {
-        print("Running TryEnterRoom with: " + newRoom);
-        for (int i = 0; i < roomsInJSON.rooms.Length; i++)
+        foreach (var room in zorkData.rooms)
         {
-            print("Trying to find room...");
-            if (newRoom.ToLower() == roomsInJSON.rooms[i].name.ToLower())
+            if (newRoom.ToLower() == room.name.ToLower())
             {
-                print("Found room: " + newRoom);
-                currentRoom = roomsInJSON.rooms[i];
+                currentRoom = room;
 
-                string roomText = string.Empty;
-                roomText += roomsInJSON.rooms[0].name + "\n";
-                roomText += roomsInJSON.rooms[0].description + "\n";
-
-                itemsInRoom = roomsInJSON.rooms[i].items.ToList<Items>();
-
+                string roomText = $"{currentRoom.name}\n{currentRoom.description}\n";
                 StartCoroutine(textManager.TypeText(output, roomText, true));
                 return;
             }
+        }
+
+        StartCoroutine(textManager.TypeText(output, "You can't go there.", true));
+    }
+
+    private void TryTakeItem(string itemName)
+    {
+        var item = currentRoom.items.FirstOrDefault(i => i.name.ToLower() == itemName.ToLower());
+        if (item != null)
+        {
+            inventoryStates[item.name] = true;
+            string itemText = $"You take the {item.name}.";
+            StartCoroutine(textManager.TypeText(output, itemText, true));
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, "That item isn't here.", true));
+        }
+    }
+
+    private void TryUseItem(string itemName)
+    {
+        if (inventoryStates.TryGetValue(itemName, out bool hasItem) && hasItem)
+        {
+            var item = zorkData.inventory.FirstOrDefault(i => i.name == itemName);
+            if (item != null)
+            {
+                foreach (var condition in item.conditions)
+                {
+                    if (EvaluateCondition(condition.condition))
+                    {
+                        ApplyStateChange(condition.stateChange);
+                        StartCoroutine(textManager.TypeText(output, condition.description, true));
+                        return;
+                    }
+                }
+            }
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, "You don't have that item.", true));
+        }
+    }
+
+    private void DisplayRoomDescription()
+    {
+        StartCoroutine(textManager.TypeText(output, currentRoom.description, true));
+    }
+
+    private void DisplayInventory()
+    {
+        string inventoryList = "You are carrying:\n";
+        foreach (var item in inventoryStates.Where(i => i.Value))
+        {
+            inventoryList += $"- {item.Key}\n";
+        }
+        StartCoroutine(textManager.TypeText(output, inventoryList, true));
+    }
+
+    private bool EvaluateCondition(string condition)
+    {
+        return condition.Split("&&")
+            .Select(c => c.Trim())
+            .All(c => inventoryStates.ContainsKey(c.TrimStart('!'))
+                      && inventoryStates[c.TrimStart('!')] == !c.StartsWith("!"));
+    }
+
+    private void ApplyStateChange(Dictionary<string, bool> stateChange)
+    {
+        foreach (var state in stateChange)
+        {
+            inventoryStates[state.Key] = state.Value;
         }
     }
 }
 
 [System.Serializable]
-public class Rooms
+public class ZorkData
 {
     public Room[] rooms;
+    public InventoryItem[] inventory;
 }
 
 [System.Serializable]
@@ -135,21 +201,38 @@ public class Room
 {
     public string name;
     public string description;
-    public string[] connectedRooms;
-    public Items[] items;
+    public string[] connected;
+    public Objects[] items;
 }
 
 [System.Serializable]
-public class Items
+public class Objects
 {
     public string name;
     public string description;
     public string canBeUsedOn;
 }
 
+[System.Serializable]
+public class InventoryItem
+{
+    public string name;
+    public Condition[] conditions;
+}
+
+[System.Serializable]
+public class Condition
+{
+    public string condition;
+    public string description;
+    public Dictionary<string, bool> stateChange;
+}
+
 public enum ZorkCommands
 {
     look,
     take,
-    move
+    move,
+    inventory,
+    use
 }

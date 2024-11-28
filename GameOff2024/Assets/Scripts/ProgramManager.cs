@@ -54,7 +54,7 @@ public class ProgramManager : MonoBehaviour
         commandManager = FindFirstObjectByType<CommandManager>();
         lockManager = FindFirstObjectByType<LockManager>();
 
-        folderPath += "/" + mainFolderName + "/";
+        folderPath += "/" + mainFolderName;
         currentFolderName = mainFolderName;
         PopulateFiles();
     }
@@ -111,6 +111,7 @@ public class ProgramManager : MonoBehaviour
                 switch (inputType)
                 {
                     case FileType.txt:
+                        bool shouldBreak = false;
                         foreach (FileInfo f in files)
                         {
                             if (name.ToLower() == f.Name.ToLower())
@@ -124,12 +125,12 @@ public class ProgramManager : MonoBehaviour
                                 }
 
                                 StartCoroutine(textManager.TypeText(output, jointContent, true));
-                            }
-                            else
-                            {
-                                StartCoroutine(textManager.TypeText(output, "Couldn't find file.", true));
+                                shouldBreak = true;
+                                break;
                             }
                         }
+                        if(!shouldBreak)
+                            StartCoroutine(textManager.TypeText(output, "Couldn't find file.", true));
                         break;
                     case FileType.exe:
                         foreach (FileInfo f in files)
@@ -212,11 +213,21 @@ public class ProgramManager : MonoBehaviour
             {
                 if(d.Extension == ".enc")
                 {
+                    string password = string.Empty;
                     Folder f = new();
                     f.name = d.Name.ToLower();
                     f.isLocked = true;
-                    string password = folderPath + d.Name + "/" + d.GetFiles()[0].Name;
+                    FileInfo[] fInfo = d.GetFiles();
+                    foreach (FileInfo fi in fInfo)
+                    {
+                        if(fi.Name.ToLower() == "password.txt".ToLower())
+                        {
+                            password = folderPath + "/" + d.Name + "/" + fi.Name;
+                        }
+                    }
                     f.password = textReader.ReadTextFile(password, folderPath + d.Name + "/")[0];
+
+                    print("Password: " + f.password + " | name: " + f.name);
 
                     print("Adding folder: " + f.name);
                     lockedFolderList.Add(f);

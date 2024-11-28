@@ -1,0 +1,3 @@
+Kasper, jeg dumma meg ut
+
+Her hinter vi til at man skal skrive hangman i work for å låse opp hangman

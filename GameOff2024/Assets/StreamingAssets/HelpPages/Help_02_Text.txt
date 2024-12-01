@@ -1,0 +1,9 @@
+You have access to these commands:
+- Help |-> Current page.
+- List |-> List available files in current folder.
+- Enter |-> Used to enter a new directory. These can be recognized with .dir or .enc
+|--> .enc folders are encrypted and might require a password
+- Read |-> Used to read a .txt file found in current folder.
+- Run |-> Used to run files in current folder.
+- Exit |-> Exit current program or folder.
+- ######## |-> Used to turn off computer. Always remember to turn off your computer before leaving.

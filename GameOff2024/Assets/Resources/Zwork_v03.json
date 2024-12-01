@@ -2,19 +2,19 @@
     "rooms": [
         {
             "name": "Welcome",
-            "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned.\n \n To begin the adventure, type 'Go to your desk'.",
+            "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned.\n You play by typing Inventory, Look, Move, Take or Use along with a related keyword. Typing Help will display this again. \n To begin the adventure, type 'Move desk'.",
             "connections": [
-                "Your desk"
+                "Desk"
             ],
             "objects": [],
             "look_actions": []
         },
         {
-            "name": "Your desk",
+            "name": "Desk",
             "description": "You are standing by your desk. the sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\n This might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles. \n \n This might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
             "connections": [
-                "Coffee Machine",
-                "Superior Section"
+                "Coffee_Machine",
+                "Superior_Section"
             ],
             "objects": [
                 {
@@ -27,7 +27,7 @@
             ],
             "look_actions": [
                 {
-                    "name": "under desk",
+                    "name": "under_desk",
                     "description": "for old times' sake, you take a quick peek under your desk. The calendar hangs in the corner, and the crime novel you never got to finish is currently supporting one of the legs on the desk. \n Something's different, though. right below your chair lies a blue corner-piece of a puzzle, with the text 'O:roomPos the' written in very fine print on it. \n You pick it up - why not?",
                     "objects": [
                         {
@@ -44,16 +44,16 @@
             ]
         },
         {
-            "name": "Coffee Machine",
+            "name": "Coffee_Machine",
             "description": "Like an oasis in the desert, the coffee machine is a beacon of hope in the realms of despair. Strangely enough, nobody is here at the moment... But that suits your purposes just fine.",
             "connections": [
-                "Your desk",
-                "Superior Section",
-                "Office Entrance"
+                "Desk",
+                "Superior_Section",
+                "Entrance"
             ],
             "objects": [
                 {
-                    "name": "Coffee Machine",
+                    "name": "Coffee_Machine",
                     "description_inactive": "you gaze longingly at the coffee machine. If only you had a cup, this whole operation might become just a bit more bearable.",
                     "description_activated": "You place the coffee cup on the coffee machine and press the button. Ten seconds later, a shot of dangerously hot, strangely viscous, and immoraly seductive coffee spits out into your cup. Serotonin flashes through your body. Stay strong, you might need this later.",
                     "needItem": "Cup",
@@ -67,7 +67,7 @@
                 {
                     "name": "Cup",
                     "description_inactive": "There is nothing in your coffee cup. You should put something appropriate in there.",
-                    "canBeUsedOn": "Coffee Machine",
+                    "canBeUsedOn": "Coffee_Machine",
                     "giveItem": "coffee_cup"
                 }
             ],
@@ -90,11 +90,11 @@
             ]
         },
         {
-            "name": "Office Entrance",
+            "name": "Entrance",
             "description": "In the darkness, you sense it. Freedom. So close. Too close...",
             "connections": [
-                "Your desk",
-                "Coffee Machine",
+                "Desk",
+                "Coffee_Machine",
                 "Home"
             ],
             "objects": [
@@ -130,15 +130,15 @@
             ]
         },
         {
-            "name": "Superior Section",
+            "name": "Superior_Section",
             "description": "You are standing at the gates of those with the power to take your joy. One would think that they might use this joy for something useful, but so far, the bi-yearly (no, not the twice-a-year-kind) pizza party is the closest they have gotten... And they made sure to pick pizza pies not chosen from the survey. To the east, Alan\u2019s cubicle is shrouded in mystery, with a faint glow suggesting its location. Best do what needs to be done and leave.",
             "connections": [
-                "Your desk",
-                "Coffee Machine"
+                "Desk",
+                "Coffee_Machine"
             ],
             "objects": [
                 {
-                    "name": "Potted plant",
+                    "name": "Potted_plant",
                     "description_inactive": "While nice, you notice something is stuck between the branches of the attempted flora. You grab hold of it, but try as you might, it simply will not budge. Perhaps if you were to weaken the plant...",
                     "description_activated": "While nice, you notice something is stuck between the branches of the attempted flora. You grab hold of it, but try as you might, it simply will not budge. Perhaps if you were to weaken the plant... \n \n While ruminating, the coffee cup you have been mindlessly carrying along with you tips fatally onto the plant. The branches and leaves flail around for a second, and you can swear you heard a muffled cry as the spilled coffee disintegrates part of the feeble flora. \n You feel slightly bad, but quickly forget as you now can pick up the strange object you saw earlier. It turns out to be a cyan-colored puzzle piece, with the text 'V:trophy rank' taped onto it.",
                     "description_already_activated": "Poor plant. It deserved better.",
@@ -193,20 +193,24 @@
             "look_actions": [
                 {
                     "name": "room",
-                    "description": "The Superior Section feels oppressive, with neatly organized cubicles and an eerie silence. Alan's desk is eastward, waiting for your next move."
-                }
+                    "description": "In the surgical blue light, a village of cubicles builds the image of a modern crypt - you can almost swear you see a trail of smoke sweep between the empty spaces in the distance. A Potted Plant struggles to bring life to the joy-sucking landscape and fails miserably. A Map that more closely resembles a magic eye-painting hangs on the cubicle walls on the outskirts of the cubicle town. While you are looking for the cubicle of your manager, Alan, there are Other Offices around . but it might not be a good idea to poke your nose where pay cuts lie waiting. \n To the east, Your Desk is patiently waiting for your retreat. To the south-east, The coffee machine is ready to comfort you."
+                },
+				{
+					"name": "cubicle",
+                    "description": "Alan's office is... muted, to put it nicely. Alan's computer is on his desk, with the Floppy Receptacle dangerously unguarded, with a stack of key cards lying on top of it, held in place by a trophy that reads 'Second Best Employee of 19th of April'. A strange Puzzle lies next to the computer. \n If you are ready to escape from this cursed place: To the east, Your Desk is patiently waiting for your retreat. To the south-east, The coffee machine is ready to comfort you."
+				}
             ]
         },
         {
             "name": "Home",
             "description": "You have done it. \n You open the door, and your beagle dog, Markie, gives you a warm welcome. you turn on the lights, and your cozy apartment springs to life: The radio plays a snazzy tune dedicated to your victory, and your favorite show starts playing on your television - and it's the start of the next episode you were going to watch! \n \n All is, once again, well.",
             "connections": [
-                "Office Entrance"
+                "Entrance"
             ],
             "objects": [
                 {
                     "name": "board",
-                    "description_activated": "you look at the cork board. Months from now, you will surely look back on this, thinking you were insane. But right now, you bask in its glory. \n All the pages of the workplace contract is hung up on this cork board, from end to end. It is an item all employees have, including the cork board, of course. \n Most probably put it away in storage, but not you. You needed to remind yourself why you were doing this. \n On top of the contract pages, an album's worth of images of Markie has been pinned, obscuring most of the message. But a red thread connects certain letters on the board to form a message, engraved in your heart: \n SUPERCALIFRAGILISTICEXPIALIDOCIOUS \n To you, this is a secret word that has opened more doors than you can possibly count. \n But to YOU, sitting there, this might just be what you need to receive a sliver of the solace gained by reaching my home. \n In the end, you just need to make it WORK.",
+                    "description_activated": "you look at the cork board. Months from now, you will surely look back on this, thinking you were insane. But right now, you bask in its glory. \n All the pages of the workplace contract is hung up on this cork board, from end to end. It is an item all employees have, including the cork board, of course. \n Most probably put it away in storage, but not you. You needed to remind yourself why you were doing this. \n On top of the contract pages, an album's worth of images of Markie has been pinned, obscuring most of the message. But a red thread connects certain letters on the board to form a message, engraved in your heart: \n CATHARSIS. \n To you, this is a secret word that has opened more doors than you can possibly count. \n But to YOU, sitting there, this might just be what you need to receive a sliver of the solace gained by reaching my home. \n In the end, you just need to make it WORK.",
                     "needItem": "SecretFloppy",
                     "objects": []
                 }
@@ -251,7 +255,7 @@
         },
         "the_solution": {
             "!the_solution": "Not so fast. According to my immaculate system, you have yet to be granted entrance into my illustrious domain. Thought you could outsmart me, HMMMM!?",
-            "the_solution": "SUPERCALIFRAGILISTICEXPIALIDOCIOUS. Now, get to work."
+            "the_solution": "CATHARSIS. Now, get to work."
         }
     }
 }

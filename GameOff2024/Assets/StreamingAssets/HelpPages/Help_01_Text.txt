@@ -1,21 +1,7 @@
-Welcome to [INSERT CORPORATE NAME]!
-We hope you're feeling in a productive and efficient mood today.
+Welcome to Bartleby Consultant Calculators INC!
+We cannot wait to measure your productivity today. No time like the present to do some work!
 
-Due to recent incidents we've had to limit the amount of commands each employee has access to.
-
-You have access to these commands:
-- Help
-|-> Current page.
-- List
-|-> List available files in current folder.
-- Enter
-|-> Used to enter a new directory. These can be recognized with .dir or .enc
-|--> .enc folders are encrypted and might require a password
-- Read
-|-> Used to read a .txt file found in current folder.
-- Run
-|-> Used to run files in current folder.
-- Exit
-|-> Exit current program or folder.
-- ########
-|-> Used to turn off computer. Always remember to turn off your computer before leaving.
+Due to recent incidents, the amount of commands each employee has access to has been limited.
+Due to recent incidents, your employee card will be needed to enter and exit the building.
+Due to recent incidents, your employee card will stay locked in your computer while active.
+Due to recent incidents, the "shut down" function is unavailable until today's work quota is met. We apologize for the inconvenience.

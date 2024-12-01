@@ -2024,16 +2024,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   output: {fileID: 737051884}
   input: {fileID: 1034755718}
-  fileName: Zwork_v03.json
-  jsonFile: {fileID: 4900000, guid: 51f2f1c231460034c942746de61885e2, type: 3}
-  zorkData:
-    rooms: []
-    inventory: []
+  fileName: Zwork_Validated.json
+  jsonFile: {fileID: 4900000, guid: 9f2ee2a9debbfd7448325d22d6f3acde, type: 3}
   currentRoom:
-    name: 
     description: 
-    connected: []
-    items: []
   textManager: {fileID: 24448115}
 --- !u!1 &980169062
 GameObject:

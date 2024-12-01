@@ -11,7 +11,7 @@
         },
         {
             "name": "Desk",
-            "description": "You are standing by your desk. the sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\n This might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles. \n \n This might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
+            "description": "You are standing by your desk. the sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\nThis might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles. \n \n This might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
             "connections": [
                 "Coffee_Machine",
                 "Superior_Section"
@@ -20,7 +20,7 @@
                 {
                     "name": "Computer",
                     "description_inactive": "You glance at your computer. As a potent fight-or-flight response is building, you decide to look away while you still remain sane.",
-                    "description_activated": "You take a deep breath: This should be quick. \n You boot up the work program, and start wailing away on the keyboard. \n Literally. \n Some look at you in confusion, while others nod sagely, recognizing someone breaking, and respectfully gives you the space you need. \n When you hit your 37th failed word, a red message appears in the corner: 'supervisor Alan has been notified. Please go to room 13784p6 for your meeting [A Quick Chat]. Bring the printout notice.' \n \n You saw Alan leave hours ago... But now that you know which office to visit, you can safely get your payday. \n The computer prints out a notice with the office number, which you disrespectfully put in your pocket.",
+                    "description_activated": "You take a deep breath: This should be quick.\nYou boot up the work program, and start wailing away on the keyboard.\nLiterally.\nSome look at you in confusion, while others nod sagely, recognizing someone breaking, and respectfully gives you the space you need. \n When you hit your 37th failed word, a red message appears in the corner: 'supervisor Alan has been notified. Please go to room 13784p6 for your meeting [A Quick Chat]. Bring the printout notice.' \n \n You saw Alan leave hours ago... But now that you know which office to visit, you can safely get your payday. \n The computer prints out a notice with the office number, which you disrespectfully put in your pocket.",
                     "needItem": "Superior",
                     "giveItem": "Floppy"
                 }
@@ -218,7 +218,7 @@
         }
     ],
     "inventory": {
-        "coffee_cup": {
+        "cup": {
             "!emptyCoffee && !fullCoffee": "Sadly, you have no coffee cup. Your life would improve if you did.",
             "emptyCoffee && !fullCoffee": "There is nothing in your coffee cup. You should put something appropriate in there.",
             "!emptyCoffee && fullCoffee": {

@@ -1,71 +1,384 @@
-
 {
-    "Rooms": {
-        "Welcome": {
-            "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned."
+  "Rooms": {
+    "welcome": {
+      "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned.\n\nYou play by typing Inventory, Look, Move, Take or Use along with a related keyword. Typing Help will display this again.\n\nTo begin the adventure, type 'move to your desk'.",
+      "connections": ["your_desk"],
+      "objects": {}
+    },
+    "your_desk": {
+      "description": "You are standing by your desk. The sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\nThis might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles.\n\nThis might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
+      "connections": ["coffee_machine", "superior_section"],
+      "objects": {
+        "computer": {
+          "text": "Your computer sits ominously at your desk, ready to devour your sanity given the chance.",
+          "conditions": {
+            "!triedSuperior": {
+              "text": "You glance at your computer. As a potent fight-or-flight response is building, you decide to look away while you still remain sane.",
+              "actionType": "Look"
+            },
+            "triedSuperior": {
+              "text": "You take a deep breath: This should be quick.\nYou boot up the work program, and start wailing away on the keyboard.\nLiterally.\nSome look at you in confusion, while others nod sagely, recognizing someone breaking, and respectfully give you the space you need.\nWhen you hit your 37th failed word, a red message appears in the corner: 'Supervisor Alan has been notified. Please go to room 13784p6 for your meeting [A Quick Chat]. Bring the printout notice.'\n\nYou saw Alan leave hours ago... But now that you know which office to visit, you can safely get your payday.\nThe computer prints out a notice with the office number, which you disrespectfully put in your pocket.",
+              "actions": ["notice"],
+              "actionType": "Use"
+            }
+          }
         },
-        "Your Desk": {
-            "description": "You are standing by your desk. The sickening yellow glow of the computer screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.",
-            "objects": [
-                {
-                    "name": "Under Desk",
-                    "description": "Looking under your desk reveals a Blue Puzzle Piece.",
-                    "giveItem": "Blue Puzzle Piece"
-                }
-            ]
+        "under_your_desk": {
+          "text": "Under your desk, you find a blue puzzle piece.",
+          "conditions": {
+            "!blue_puzzle_piece": {
+              "text": "For old times' sake, you take a quick peek under your desk. The calendar hangs in the corner, and the crime novel you never got to finish is currently supporting one of the legs on the desk.\nSomething's different, though. Right below your chair lies a blue corner-piece of a puzzle, with the text 'O:roomFirst the' written in very fine print on it.",
+              "actionType": "Look"
+            },
+            "": {
+              "text": "You pick up the blue puzzle piece.",
+              "actions": ["blue_puzzle_piece", "take"],
+              "actionType": "Take"
+            },
+            "blue_puzzle_piece": {
+              "text": "There's nothing else under the desk.",
+              "actionType": "Look"
+            }
+          }
         },
-        "Coffee Machine": {
-            "description": "Like an oasis in the desert, the coffee machine is a beacon of hope.",
-            "objects": [
-                {
-                    "name": "Trolley",
-                    "description": "A shaky trolley containing a few items.",
-                    "giveItem": "Red Puzzle Piece"
-                },
-                {
-                    "name": "Coffee Machine",
-                    "description": "The machine is ready to brew if you have a cup.",
-                    "needItem": "Cup",
-                    "giveItem": "FullCup"
-                }
-            ]
+        "room": {
+          "text": "You observe the room. In this enigmatic tube of an office, an array of screens are in sight any way you turn—while you would think looking at the walls would give you a brief reprieve from THE YELLOW LIGHT, lines of head-height mirrors have been installed to make sure that the only place to escape the galling glow is in a fetal position under your desk.\nCurrently, only seven fellow office workers are resorting to this. A record low number!\nWestwards, the superior's section looms insignificantly, while to your south, the coffee machine rests."
+        }
+      }
+    },
+    "coffee_machine": {
+      "description": "Like an oasis in the desert, the coffee machine is a beacon of hope in the realms of despair. Strangely enough, nobody is here at the moment... But that suits your purposes just fine.",
+      "connections": ["your_desk", "superior_section", "office_entrance"],
+      "objects": {
+        "coffee_machine": {
+          "text": "The coffee machine looks inviting.",
+          "conditions": {
+            "!fullCoffee": {
+              "text": "You gaze longingly at the coffee machine. If only you had a cup, this whole operation might become just a bit more bearable.",
+              "actionType": "Look"
+            },
+            "emptyCoffee": {
+              "text": "You place the coffee cup on the coffee machine and press the button. Ten seconds later, a shot of dangerously hot, strangely viscous, and immorally seductive coffee spits out into your cup. Serotonin flashes through your body. Stay strong; you might need this later.",
+              "actions": ["fullCoffee", "!emptyCoffee"],
+              "actionType": "Use"
+            }
+          }
         },
-        "Office Entrance": {
-            "description": "In the darkness, you sense it. Freedom. So close.",
-            "objects": [
-                {
-                    "name": "Doormat",
-                    "description": "Checking under the doormat reveals a Green Puzzle Piece.",
-                    "giveItem": "Green Puzzle Piece"
-                }
-            ]
+        "trolley": {
+          "text": "A small, rickety trolley with 'coffee paraphernalia' is here.",
+          "conditions": {
+            "": {
+              "text": "The trolley contains cups, teaspoons, and a packet of sweetener. The trolley is shaking uncontrollably.",
+              "actionType": "Look"
+            }
+          }
         },
-        "Superior Section": {
-            "description": "The gates of corporate power.",
-            "objects": [
-                {
-                    "name": "Potted Plant",
-                    "description": "The plant seems dry.",
-                    "needItem": "FullCup",
-                    "giveItem": "Cyan Puzzle Piece"
-                },
-                {
-                    "name": "Floppy Receptacle",
-                    "description": "It looks like it accepts a floppy disk.",
-                    "needItem": "All Puzzle Pieces",
-                    "giveItem": "Floppy"
-                }
-            ]
+        "cup": {
+          "text": "A coffee cup is on the trolley.",
+          "conditions": {
+            "!emptyCoffee": {
+              "text": "You take a coffee cup from the trolley.",
+              "actions": ["emptyCoffee", "take"],
+              "actionType": "Take"
+            },
+            "emptyCoffee || fullCoffee": {
+              "text": "There are no more cups to take.",
+              "actionType": "Take"
+            }
+          }
         },
-        "Home": {
-            "description": "Your cozy home, a place of safety.",
-            "objects": [
-                {
-                    "name": "Markie",
-                    "description": "Your dog Markie wags their tail happily.",
-                    "interactTwiceGiveItem": "Yellow Puzzle Piece"
-                }
-            ]
+        "wheel": {
+          "text": "A wheel on the trolley seems loose.",
+          "conditions": {
+            "!red_puzzle_piece": {
+              "text": "You take a closer look at the vibrating wheel. While helpfully poking it with the packet of sweetener, a red puzzle piece flies out of the spokes, ricocheting around the room—but thankfully missing the all-important coffee tubes. When you take a closer look at it, you see that 'R:trolley Trolley' is printed on it.",
+              "actionType": "Look"
+            },
+            "": {
+              "text": "You pick up the red puzzle piece.",
+              "actions": ["red_puzzle_piece", "take"],
+              "actionType": "Take"
+            },
+            "red_puzzle_piece": {
+              "text": "You have already taken the puzzle piece from the wheel.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "room": {
+          "text": "The room is quiet—too quiet. A coffee machine rests awkwardly on a pillar a little too low in what is nearly the center of the room, with several connecting tubes and cables lying loosely between it and the northern wall. A small, rickety trolley has been placed next to it, with what you could call 'coffee paraphernalia.'\n\nYou can see the pale blue lights from the superior section reflect along the walls of the hallway northwest, while to the north you feel the yellow glow of your desk. Further south, the office entrance taunts you with its dark embrace. Literally! The lights went out last month, and they have yet to fix them."
+        }
+      }
+    },
+    "office_entrance": {
+      "description": "In the darkness, you sense it. Freedom. So close. Too close...",
+      "connections": [
+        "your_desk",
+        "coffee_machine",
+        {
+          "home": {
+            "condition": "secretFloppy",
+            "text": "With the secrets in hand—or, more precisely, cleverly obscured inner pocket of your sweater—you drive home victoriously.",
+            "actions": ["endGame"]
+          }
+        }
+      ],
+      "objects": {
+        "door": {
+          "text": "A large steel door blocks the way out.",
+          "conditions": {
+            "!secretFloppy": {
+              "text": "The steel door blocks your way. You could easily cross that barrier with your employee ID card, but as luck would have it, your manager, Alan, has it in his office for safekeeping.",
+              "actionType": "Look"
+            },
+            "secretFloppy": {
+              "text": "These puny steel doors cannot hold you, for you are...\n\nSomeone with an employee card!",
+              "actionType": "Use"
+            }
+          }
+        },
+        "doormat": {
+          "text": "A doormat that reads 'thank you for coming!!' lies here.",
+          "conditions": {
+            "!green_puzzle_piece": {
+              "text": "You check the doormat. You find a strange green puzzle piece with 'D:toilet #' etched into it.",
+              "actionType": "Look"
+            },
+            "": {
+              "text": "You pick up the green puzzle piece.",
+              "actions": ["green_puzzle_piece", "take"],
+              "actionType": "Take"
+            },
+            "green_puzzle_piece": {
+              "text": "It's just a doormat.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "toilet": {
+          "text": "The singular toilet of the office is busy, as usual.",
+          "conditions": {
+            "": {
+              "text": "You suspect that the door was welded shut long before you started working here.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "room": {
+          "text": "The dimly lit room is akin to a fortress bastion: A large steel door blocks the way out, with an out-of-place card reader on the slanting wall next to it.\nIn an attempt at humor from HR that is too little too late, a doormat that reads 'thank you for coming!!' with an overly enthusiastic legally distinct mouse lies in front of the entrance. The toilet is 'accessible' via a door to the left of the entrance, but is better appreciated as a modern art piece or statement.\n\nTo the north, the coffee machine beckons.\nThrough the entrance, you feel the call of home, but it might not yet be time.\nTo the west, the paradoxical one-way door to your desk lies open."
+        }
+      }
+    },
+    "superior_section": {
+      "description": "You are standing at the gates of those with the power to take your joy. One would think that they might use this joy for something useful, but so far, the bi-yearly (no, not the twice-a-year kind) pizza party is the closest they have gotten... And they made sure to pick pizza pies not chosen from the survey.\nTo the east, Alan's cubicle is shrouded in mystery, with a faint glow suggesting its location. Best do what needs to be done and leave.",
+      "connections": ["your_desk", "coffee_machine"],
+      "objects": {
+        "potted_plant": {
+          "text": "A potted plant struggles to bring life to the joy-sucking landscape and fails miserably.",
+          "conditions": {
+            "!cyan_puzzle_piece && !fullCoffee": {
+              "text": "You notice something stuck between the branches, but it won't budge. Perhaps if you were to weaken the plant...",
+              "actionType": "Look"
+            },
+            "!cyan_puzzle_piece && fullCoffee": {
+              "text": "While ruminating, the coffee cup you have been mindlessly carrying along with you tips fatally onto the plant. The branches and leaves flail around for a second, and you can swear you heard a muffled cry as the spilled coffee disintegrates part of the feeble flora.\nYou feel slightly bad, but quickly forget as you now can pick up the strange object you saw earlier. It turns out to be a cyan-colored puzzle piece, with the text 'V:trophy rank' taped onto it.",
+              "actions": ["cyan_puzzle_piece", "!fullCoffee"],
+              "actionType": "Use"
+            },
+            "cyan_puzzle_piece": {
+              "text": "Poor plant. It deserved better.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "map": {
+          "text": "A map that more closely resembles a magic eye painting hangs on the cubicle walls.",
+          "conditions": {
+            "!triedSuperior && !notice": {
+              "text": "You try to understand the map to no avail. At the bottom, it reads: 'Cross-reference your superior meeting notice with directional chart for directions.'",
+              "actions": ["triedSuperior"],
+              "actionType": "Look"
+            },
+            "notice": {
+              "text": "Using the notice, the path to Alan's cubicle becomes clear. The cubicle lies eastward in the superior section.",
+              "actions": ["inOffice"],
+              "actionType": "Use"
+            }
+          }
+        },
+        "floppy_receptacle": {
+          "text": "Alan's computer is on his desk.",
+          "conditions": {
+            "inOffice && !secretFloppy": {
+              "text": "At last!\nYou rush over to the floppy receptacle and shove your floppy disk in. Some smooth keyboard taps later you get the satisfying 'data transfer complete' message on the blue computer screen, and—\nHey, hang on, managers get BLUE screens? That's unfair! *I* want a blue screen!\n... Nevermind, you got what you came for, and soon you can kiss this life of torpor goodbye.\n\nYou eject the floppy disk and pick up your employee badge.\nYou are ready to leave.",
+              "actions": ["secretFloppy"],
+              "actionType": "Use"
+            },
+            "secretFloppy": {
+              "text": "You take a minute to envy the blue screen.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "terminal": {
+          "text": "Yes, having to stay even a day longer in this hole would have terminal consequences in the long term. Ask your psychologist, they'll agree.",
+          "conditions": {
+            "red_puzzle_piece && blue_puzzle_piece && cyan_puzzle_piece && green_puzzle_piece && yellow_puzzle_piece": {
+              "text": "Pondering the Pulitzer puzzle, you glance up at the computer terminal.\nSomehow, it was primed to accept five inputs, with some strange line breaks appearing between some letters:\n\n_ _ _ _ - _ C K !\n\nWhat this means and where to use it is anyone's guess. Surely, there must be some way to make it work.",
+              "actions": ["the_solution"],
+              "actionType": "Use"
+            },
+            "!red_puzzle_piece || !blue_puzzle_piece || !cyan_puzzle_piece || !green_puzzle_piece || !yellow_puzzle_piece": {
+              "text": "You look around to figure out what 'the terminal' could mean, but the answer eludes you. Perhaps you need more pieces to solve the puzzle?",
+              "actionType": "Use"
+            }
+          }
+        },
+        "alan_desk": {
+          "text": "Alan's desk is here.",
+          "conditions": {
+            "inOffice": {
+              "text": "At Alan's desk, you find a floppy receptacle and some key cards. The desk is strangely organized, with a stack of papers neatly arranged.",
+              "actionType": "Look"
+            },
+            "!inOffice": {
+              "text": "You cannot locate Alan's desk without the map.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "room": {
+          "text": "In the surgical blue light, a village of cubicles builds the image of a modern crypt—you can almost swear you see a trail of smoke sweep between the empty spaces in the distance. A potted plant struggles here. A map that more closely resembles a magic eye painting hangs on the cubicle walls.\nWhile you are looking for the cubicle of your manager, Alan, there are other offices around, but it might not be a good idea to poke your nose where pay cuts lie waiting.\nTo the east, your desk is waiting. To the southeast, the coffee machine is ready to comfort you."
+        }
+      }
+    },
+    "home": {
+      "description": "You have done it.\nYou open the door, and your beagle dog, Markie, gives you a warm welcome. You turn on the lights, and your cozy apartment springs to life: The radio plays a snazzy tune dedicated to your victory, and your favorite show starts playing on your television—and it's the start of the next episode you were going to watch!\n\nAll is, once again, well.",
+      "connections": [],
+      "objects": {
+        "markie": {
+          "text": "Markie slobbers by your legs, following your every move.",
+          "conditions": {
+            "!yellow_puzzle_piece": {
+              "text": "You pet Markie and find a yellow puzzle piece with 'A:rooms amnt.' written on it.",
+              "actions": ["yellow_puzzle_piece", "take"],
+              "actionType": "Look"
+            },
+            "yellow_puzzle_piece": {
+              "text": "You pet Markie once more. He's happy.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "board": {
+          "text": "A large cork board full of images of Markie hangs on the wall.",
+          "conditions": {
+            "!the_solution": {
+              "text": "You look at the cork board. Months from now, you will surely look back on this, thinking you were insane. But right now, you bask in its glory.\nAll the pages of the workplace contract are hung up on this cork board, from end to end. It is an item all employees have, including the cork board, of course.\nMost probably put it away in storage, but not you. You needed to remind yourself why you were doing this.\nOn top of the contract pages, an album's worth of images of Markie has been pinned, obscuring most of the message. But a red thread connects certain letters on the board to form a message, engraved in your heart:\nCATHARSIS.\nTo you, this is a secret word that has opened more doors than you can possibly count.\nBut to YOU, sitting there, this might just be what you need to receive a sliver of the solace gained by reaching my home.\nIn the end, you just need to make it WORK.",
+              "actions": ["the_solution"],
+              "actionType": "Look"
+            },
+            "the_solution": {
+              "text": "You've already noted the message on the board.",
+              "actionType": "Look"
+            }
+          }
+        },
+        "room": {
+          "text": "The apartment is exactly as you remember it. It might not be large, but it is enough for you and Markie."
+        }
+      }
+    }
+  },
+  "inventory": {
+    "cup": {
+      "text": "A coffee cup.",
+      "conditions": {
+        "emptyCoffee": {
+          "text": "There is nothing in your coffee cup.",
+          "actionType": "Look"
+        },
+        "fullCoffee": {
+          "text": "In your hand, you have a cup of desirable coffee.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "notice": {
+      "text": "A notice with a room number.",
+      "conditions": {
+        "notice": {
+          "text": "A notice given to you after identifying an issue between chair and screen.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "blue_puzzle_piece": {
+      "text": "A puzzle piece, with the text 'O:roomFirst the' written in very fine print on it.",
+      "conditions": {
+        "blue_puzzle_piece": {
+          "text": "A puzzle piece, with the text 'O:roomFirst the' written in very fine print on it.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "red_puzzle_piece": {
+      "text": "A puzzle piece, with the text 'R:trolley Trolley' printed on it.",
+      "conditions": {
+        "red_puzzle_piece": {
+          "text": "A puzzle piece, with the text 'R:trolley Trolley' printed on it.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "green_puzzle_piece": {
+      "text": "A puzzle piece. Someone has used a knife to etch the words 'D:toilet #' into it.",
+      "conditions": {
+        "green_puzzle_piece": {
+          "text": "A puzzle piece. Someone has used a knife to etch the words 'D:toilet #' into it.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "cyan_puzzle_piece": {
+      "text": "A puzzle piece with the text 'V:trophy rank' taped onto it.",
+      "conditions": {
+        "cyan_puzzle_piece": {
+          "text": "A puzzle piece with the text 'V:trophy rank' taped onto it.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "yellow_puzzle_piece": {
+      "text": "A puzzle piece, with the text 'A:rooms amnt.' written in impeccable penmanship.",
+      "conditions": {
+        "yellow_puzzle_piece": {
+          "text": "A puzzle piece, with the text 'A:rooms amnt.' written in impeccable penmanship.",
+          "actionType": "Look"
+        }
+      }
+    },
+    "the_solution": {
+      "text": "CATHARSIS.",
+      "conditions": {
+        "the_solution": {
+          "text": "CATHARSIS. Now, get to work.",
+          "actionType": "Look"
+        },
+        "!the_solution": {
+          "text": "Not so fast. According to my immaculate system, you have yet to be granted entrance into my illustrious domain. Thought you could outsmart me, HMMMM!?",
+          "actionType": "Look"
+        }
+      }
+    },
+    "floppy":{
+        "text": "A completely ordinary floppy disk, just waiting to absorb company secrets",
+        "conditions": {
+            "floppy": {
+                "text": "A completely ordinary floppy disk",
+                "actionType": "Look"
+            }
         }
     }
+  }
 }

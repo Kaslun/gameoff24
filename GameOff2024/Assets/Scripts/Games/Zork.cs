@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using System;
 using System.Linq;
-using Newtonsoft.Json; // Make sure to include this
+using Newtonsoft.Json;
 
 public class Zork : MonoBehaviour
 {
@@ -36,19 +36,15 @@ public class Zork : MonoBehaviour
         if (jsonFile == null)
         {
             jsonFile = Resources.Load<TextAsset>(fileName);
-            print("jsonfile = " + jsonFile.name);
         }
 
         LoadZorkData();
-        InitializeInventory();    
+        InitializeInventory();
     }
 
     private void LoadZorkData()
     {
-        print("Loading Zork data");
         zorkData = JsonConvert.DeserializeObject<ZorkData>(jsonFile.text);
-        print("Num of rooms: " + zorkData.Rooms.Count);
-
         TryEnterRoom("Welcome");
     }
 
@@ -58,9 +54,12 @@ public class Zork : MonoBehaviour
 
         foreach (var item in zorkData.inventory)
         {
-            inventoryStates[item.Key] = item.Key == "floppy"; // Default all items to "not owned"
+            inventoryStates[item.Key] = item.Key == "floppy"; // Player starts with the floppy disk
             print(item.Key);
         }
+
+        // Initialize flags
+        flags = new Dictionary<string, bool>();
     }
 
     private void Update()
@@ -113,9 +112,12 @@ public class Zork : MonoBehaviour
                     break;
                 case ZorkCommands.use:
                     if (inputText.Length > 1)
-                        TryUseItem(string.Join(" ", inputText.Skip(1)));
+                        TryUse(string.Join(" ", inputText.Skip(1)));
                     else
                         StartCoroutine(textManager.TypeText(output, "Use what?", true));
+                    break;
+                case ZorkCommands.help:
+                    ShowHelp();
                     break;
                 default:
                     StartCoroutine(textManager.TypeText(output, "I don't understand that command.", true));
@@ -139,9 +141,15 @@ public class Zork : MonoBehaviour
             StartCoroutine(textManager.TypeText(output, roomText, true));
 
             // Optionally display available exits or connections
-            if(roomKey != "welcome")
+            if (roomKey != "welcome")
                 DisplayAvailableConnections();
-
+        }
+        else if (flags.ContainsKey("move_home") && roomKey == "home")
+        {
+            // Allow moving to home if the flag is set
+            currentRoom = zorkData.Rooms["home"];
+            string roomText = $"{currentRoom.description}\n";
+            StartCoroutine(textManager.TypeText(output, roomText, true));
         }
         else
         {
@@ -160,7 +168,7 @@ public class Zork : MonoBehaviour
             var obj = currentRoom.objects[itemKey];
 
             // Process taking the item
-            ProcessGameObject(itemKey, obj, actionType: ActionType.Take);
+            ProcessGameObject(itemKey, obj, actionType: "Take");
         }
         else
         {
@@ -168,39 +176,32 @@ public class Zork : MonoBehaviour
         }
     }
 
-    private void TryUseItem(string itemName)
+    private void TryUse(string itemName)
     {
         string itemKey = itemName.Replace(" ", "_").ToLower();
+
         if (inventoryStates.TryGetValue(itemKey, out bool hasItem) && hasItem)
         {
+            // Process inventory item
             if (zorkData.inventory.ContainsKey(itemKey))
             {
                 var item = zorkData.inventory[itemKey];
-
-                if (item.conditions != null)
-                {
-                    foreach (var conditionPair in item.conditions)
-                    {
-                        string conditionKey = conditionPair.Key;
-                        var conditionData = conditionPair.Value;
-
-                        if (EvaluateCondition(conditionKey))
-                        {
-                            ApplyActions(conditionData.actions);
-                            StartCoroutine(textManager.TypeText(output, conditionData.text, true));
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    StartCoroutine(textManager.TypeText(output, item.text, true));
-                }
+                ProcessInventoryItem(itemKey, item, actionType: "Use");
             }
+            else
+            {
+                StartCoroutine(textManager.TypeText(output, "You can't use that.", true));
+            }
+        }
+        else if (currentRoom.objects != null && currentRoom.objects.ContainsKey(itemKey))
+        {
+            // Process room object
+            var obj = currentRoom.objects[itemKey];
+            ProcessGameObject(itemKey, obj, actionType: "Use");
         }
         else
         {
-            StartCoroutine(textManager.TypeText(output, "You don't have that item.", true));
+            StartCoroutine(textManager.TypeText(output, "You can't use that here.", true));
         }
     }
 
@@ -212,7 +213,20 @@ public class Zork : MonoBehaviour
         if (currentRoom.objects != null && currentRoom.objects.ContainsKey(objectKey))
         {
             var obj = currentRoom.objects[objectKey];
-            ProcessGameObject(objectKey, obj, actionType: ActionType.Look);
+            ProcessGameObject(objectKey, obj, actionType: "Look");
+        }
+        else if (inventoryStates.TryGetValue(objectKey, out bool hasItem) && hasItem)
+        {
+            // Look at inventory item
+            if (zorkData.inventory.ContainsKey(objectKey))
+            {
+                var item = zorkData.inventory[objectKey];
+                ProcessInventoryItem(objectKey, item, actionType: "Look");
+            }
+            else
+            {
+                StartCoroutine(textManager.TypeText(output, "You don't have that item.", true));
+            }
         }
         else
         {
@@ -222,7 +236,7 @@ public class Zork : MonoBehaviour
 
     private void DisplayRoomDescription()
     {
-        StartCoroutine(textManager.TypeText(output, currentRoom.description, true));
+        StartCoroutine(textManager.TypeText(output, currentRoom.GetRoomDescription(), true));
     }
 
     private void DisplayInventory()
@@ -232,12 +246,21 @@ public class Zork : MonoBehaviour
 
         foreach (var item in inventoryStates.Where(i => i.Value))
         {
-            inventoryList += $"- {item.Key.Replace("_", " ")}\n";
+            string itemKey = item.Key;
+            inventoryList += $"- {FormatName(itemKey)}\n";
 
-            print("item name: " + item);
-
-            print("has item:" + zorkData.inventory.ContainsKey(item.Key));
-            inventoryList += $"{zorkData.inventory[item.Key.Replace("_", " ")].text}\n\n";
+            if (zorkData.inventory.ContainsKey(itemKey))
+            {
+                var inventoryItem = zorkData.inventory[itemKey];
+                foreach (var cond in inventoryItem.conditions)
+                {
+                    if (EvaluateCondition(cond.ConditionExpression))
+                    {
+                        inventoryList += $"{cond.Text}\n";
+                        break;
+                    }
+                }
+            }
             hasItems = true;
         }
 
@@ -249,45 +272,23 @@ public class Zork : MonoBehaviour
         StartCoroutine(textManager.TypeText(output, inventoryList, true));
     }
 
-    private void ProcessGameObject(string objectName, GameObjectData objData, ActionType actionType)
+    private void ProcessGameObject(string objectName, GameObjectData objData, string actionType)
     {
         string textToDisplay = "";
         bool conditionMet = false;
 
         if (objData.conditions != null && objData.conditions.Count > 0)
         {
-            foreach (var conditionPair in objData.conditions)
+            foreach (var cond in objData.conditions)
             {
-                string conditionKey = conditionPair.Key;
-                ConditionData conditionData = conditionPair.Value;
-
-                if (EvaluateCondition(conditionKey))
+                if (string.Equals(cond.ActionType, actionType, StringComparison.OrdinalIgnoreCase) || string.Equals(cond.ActionType, "Any", StringComparison.OrdinalIgnoreCase))
                 {
-                    conditionMet = true;
-
-                    // Only apply actions if the actionType matches
-                    if (conditionData.actionType == actionType || conditionData.actionType == ActionType.Any)
+                    if (EvaluateCondition(cond.ConditionExpression))
                     {
-                        if (actionType == ActionType.Take)
-                        {
-                            // Check if the object can be taken
-                            if (conditionData.actions != null && conditionData.actions.Contains("take"))
-                            {
-                                inventoryStates[objectName] = true;
-                                textToDisplay = conditionData.text ?? $"You take the {FormatName(objectName)}.";
-                            }
-                            else
-                            {
-                                textToDisplay = "You can't take that.";
-                            }
-                        }
-                        else if (actionType == ActionType.Look)
-                        {
-                            textToDisplay = conditionData.text;
-                        }
-
-                        ApplyActions(conditionData.actions);
-                        break; // Stop after first valid condition
+                        ApplyActions(cond.Actions, objectName);
+                        textToDisplay = cond.Text;
+                        conditionMet = true;
+                        break;
                     }
                 }
             }
@@ -295,7 +296,7 @@ public class Zork : MonoBehaviour
         else
         {
             // No conditions; default behavior
-            if (actionType == ActionType.Take)
+            if (actionType.Equals("Take", StringComparison.OrdinalIgnoreCase))
             {
                 if (objData.actions != null && objData.actions.Contains("take"))
                 {
@@ -306,18 +307,80 @@ public class Zork : MonoBehaviour
                 {
                     textToDisplay = "You can't take that.";
                 }
+                ApplyActions(objData.actions, objectName);
+                conditionMet = true;
             }
-            else if (actionType == ActionType.Look)
+            else if (actionType.Equals("Look", StringComparison.OrdinalIgnoreCase))
             {
                 textToDisplay = objData.text;
+                conditionMet = true;
             }
-
-            ApplyActions(objData.actions);
+            else if (actionType.Equals("Use", StringComparison.OrdinalIgnoreCase))
+            {
+                textToDisplay = "You can't use that.";
+                conditionMet = true;
+            }
         }
 
-        if (!string.IsNullOrEmpty(textToDisplay))
+        if (conditionMet)
         {
-            StartCoroutine(textManager.TypeText(output, textToDisplay, true));
+            if (!string.IsNullOrEmpty(textToDisplay))
+            {
+                StartCoroutine(textManager.TypeText(output, textToDisplay, true));
+            }
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, "You can't do that right now.", true));
+        }
+    }
+
+    private void ProcessInventoryItem(string itemName, InventoryItem itemData, string actionType)
+    {
+        string textToDisplay = "";
+        bool conditionMet = false;
+
+        if (itemData.conditions != null && itemData.conditions.Count > 0)
+        {
+            foreach (var cond in itemData.conditions)
+            {
+                if (string.Equals(cond.ActionType, actionType, StringComparison.OrdinalIgnoreCase) || string.Equals(cond.ActionType, "Any", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (EvaluateCondition(cond.ConditionExpression))
+                    {
+                        ApplyActions(cond.Actions, itemName);
+                        textToDisplay = cond.Text;
+                        conditionMet = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // No conditions; default behavior
+            if (actionType.Equals("Look", StringComparison.OrdinalIgnoreCase))
+            {
+                textToDisplay = itemData.text;
+                conditionMet = true;
+            }
+            else if (actionType.Equals("Use", StringComparison.OrdinalIgnoreCase))
+            {
+                textToDisplay = "You can't use that.";
+                conditionMet = true;
+            }
+        }
+
+        if (conditionMet)
+        {
+            if (!string.IsNullOrEmpty(textToDisplay))
+            {
+                StartCoroutine(textManager.TypeText(output, textToDisplay, true));
+            }
+        }
+        else
+        {
+            StartCoroutine(textManager.TypeText(output, "You can't do that right now.", true));
         }
     }
 
@@ -358,12 +421,8 @@ public class Zork : MonoBehaviour
         if (string.IsNullOrEmpty(condition)) return true;
 
         condition = condition.Replace(" ", "");
-        if (condition.StartsWith("!"))
-        {
-            string flag = condition.Substring(1);
-            return !GetFlag(flag);
-        }
-        else if (condition.Contains("&&"))
+
+        if (condition.Contains("&&"))
         {
             var conditions = condition.Split(new[] { "&&" }, StringSplitOptions.None);
             foreach (var cond in conditions)
@@ -383,13 +442,18 @@ public class Zork : MonoBehaviour
             }
             return false;
         }
+        else if (condition.StartsWith("!"))
+        {
+            string flag = condition.Substring(1);
+            return !GetFlag(flag);
+        }
         else
         {
             return GetFlag(condition);
         }
     }
 
-    private void ApplyActions(List<string> actions)
+    private void ApplyActions(List<string> actions, string objectName = "")
     {
         if (actions == null) return;
 
@@ -399,6 +463,18 @@ public class Zork : MonoBehaviour
             {
                 string flag = action.Substring(1);
                 SetFlag(flag, false);
+            }
+            else if (action.Equals("take", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrEmpty(objectName))
+                {
+                    inventoryStates[objectName] = true;
+                }
+            }
+            else if (action.StartsWith("move_"))
+            {
+                // Handle move actions
+                SetFlag(action, true);
             }
             else
             {
@@ -428,6 +504,12 @@ public class Zork : MonoBehaviour
     {
         return name.Replace("_", " ");
     }
+
+    private void ShowHelp()
+    {
+        string helpText = "You can use commands like 'look at [object]', 'use [object]', 'take [object]', 'move to [location]', or 'inventory'.";
+        StartCoroutine(textManager.TypeText(output, helpText, true));
+    }
 }
 
 #region Data Classes
@@ -445,29 +527,46 @@ public class Room
     public string description;
     public List<object> connections; // Can be strings or dictionaries (for conditional connections)
     public Dictionary<string, GameObjectData> objects;
+
+    public string GetRoomDescription()
+    {
+        if (objects != null && objects.ContainsKey("room"))
+        {
+            return objects["room"].text;
+        }
+        return description;
+    }
 }
 
 [System.Serializable]
 public class GameObjectData
 {
     public string text;
-    public Dictionary<string, ConditionData> conditions;
+    public List<ConditionData> conditions;
     public List<string> actions;
 }
 
 [System.Serializable]
 public class ConditionData
 {
-    public string text;
-    public List<string> actions;
-    public ActionType actionType = ActionType.Any; // New property to specify the action type
+    [JsonProperty("condition")]
+    public string ConditionExpression;
+
+    [JsonProperty("text")]
+    public string Text;
+
+    [JsonProperty("actions")]
+    public List<string> Actions;
+
+    [JsonProperty("actionType")]
+    public string ActionType;
 }
 
 [System.Serializable]
 public class InventoryItem
 {
-    public Dictionary<string, ConditionData> conditions;
     public string text;
+    public List<ConditionData> conditions;
 }
 
 public class ConnectionData
@@ -478,19 +577,12 @@ public class ConnectionData
 
 #endregion
 
-public enum ActionType
-{
-    Look,
-    Take,
-    Use,
-    Any // For actions that can occur on any interaction
-}
-
 public enum ZorkCommands
 {
     look,
     take,
     move,
     inventory,
-    use
+    use,
+    help
 }

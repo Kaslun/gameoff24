@@ -32,6 +32,8 @@ public class CommandManager : MonoBehaviour
     private ProgramManager programManager;
     [SerializeField]
     private LockManager lockManager;
+    [SerializeField]
+    private WorkManager workManager;
 
     private bool isRunning = false;
     public bool isWaitingForPassword = false;
@@ -119,6 +121,9 @@ public class CommandManager : MonoBehaviour
             case Commands.help:
                 outString = helpManager.GetCurrentPage(0);
                 break;
+            case Commands.commands:
+                outString = helpManager.GetCurrentPage(1);
+                break;
             case Commands.run:
                 if (splitInput.Length <= 1)
                     outString = errorMessage;
@@ -153,9 +158,12 @@ public class CommandManager : MonoBehaviour
                 outString = welcomeMessage;
                 break;
             case Commands.shutdown:
-                if (splitInput[0] == "shutdown")
-                    break;
-                screenManager.SwitchScreens(5);
+                if (!workManager.canShutdown)
+                {
+                    RunCommand(Commands.error);
+                }
+                else
+                    screenManager.SwitchScreens(5);
                 break;
         }
 
@@ -224,6 +232,7 @@ public enum Commands
     read,
     error,
     shutdown,
+    commands,
     welcome
 }
 

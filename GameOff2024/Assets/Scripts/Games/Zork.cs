@@ -28,6 +28,9 @@ public class Zork : MonoBehaviour
     [SerializeField]
     private TextManager textManager;
 
+    [SerializeField]
+    private CommandManager commandManager;
+
     public Dictionary<string, bool> inventoryStates = new Dictionary<string, bool>();
     public Dictionary<string, bool> flags = new Dictionary<string, bool>();
 
@@ -71,6 +74,10 @@ public class Zork : MonoBehaviour
 
         if (Input.GetButtonDown("Submit") && !textManager.isRunning)
         {
+            if (CommandManager.ParseCommand(input.text) == Commands.exit)
+            {
+                FindFirstObjectByType<ScreenManager>().SwitchScreens(0);
+            }
             ParseInput(input.text);
             input.text = "";
         }

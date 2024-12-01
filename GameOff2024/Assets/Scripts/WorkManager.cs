@@ -15,6 +15,8 @@ public class WorkManager : MonoBehaviour
     private int counter = 0;
     public string[] words;
 
+    public bool canShutdown = false;
+
     [SerializeField]
     private string preFix = "Type: ";
     [SerializeField]
@@ -30,6 +32,8 @@ public class WorkManager : MonoBehaviour
     private TextReader textReader;
     [SerializeField]
     private ScreenManager screenManager;
+    [SerializeField]
+    private CommandManager commandManager;
 
     private void OnDisable()
     {
@@ -60,9 +64,13 @@ public class WorkManager : MonoBehaviour
                     screenManager.SwitchScreens(0);
                 }
 
-                if(input.text.ToLower() == "catharsis".ToLower())
+                if(input.text.ToLower() == "catharsis")
                 {
-                    CommandManager.ParseCommand("shutdown");
+                    print("Catharsis!");
+                    canShutdown = true;
+
+                    commandManager.RunCommand(Commands.shutdown);
+                    return;
                 }
 
                 if (input.text.ToLower() == currentWord.ToLower())

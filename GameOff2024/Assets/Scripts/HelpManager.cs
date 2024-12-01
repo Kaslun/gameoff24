@@ -18,7 +18,7 @@ public class HelpManager : MonoBehaviour
 
     public string GetCurrentPage(int pageNum)//hjernen er ikke på plass nok til å hekte på help_01 som intromelding, please do this (flyttet commands til help_02 så alle kan leses og satte det til å være help)
     {
-        string[] page = textReader.ReadTextFile(filePath, Application.streamingAssetsPath + "/" + folderPath);
+        string[] page = textReader.ReadTextFile(filePath + pageNum + ".txt", Application.streamingAssetsPath + "/" + folderPath);
 
         string outString = string.Empty;
 

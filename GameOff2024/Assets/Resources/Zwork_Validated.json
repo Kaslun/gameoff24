@@ -1,12 +1,12 @@
 {
   "Rooms": {
     "welcome": {
-      "description": "Welcome to Zwork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned.\n\nYou play by typing commands like 'look at [object]', 'use [object]', 'take [object]', 'move to [location]', or 'inventory'. Typing 'help' will display this again.\n\nTo begin the adventure, type 'move your desk'.",
+      "description": "Welcome to zWork, or as I'd rather have it known, The Incredible Heist! In this true-to-life retelling of a fantastical case of industrial espionage, you play as a plucky, hard-boiled office employee who might just have had one coffee too many. Taking place at the end of the autobiographic novel of the same name, your task is now to pick up 'The Payload' via your super secret floppy disk from your manager Alan's cubicle and escape the office unseen - risks be damned.\n\nYou play by typing commands like 'look at [object]', 'use [object]', 'take [object]', 'move to [location]', or 'inventory'. Typing 'help' will display this again.\n\nTo begin the adventure, type 'move your desk'.",
       "connections": ["your_desk"],
       "objects": {}
     },
     "your_desk": {
-      "description": "You are standing by your desk. The sickening yellow glow of the <i>computer</i> screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\nThis might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles.\n\nThis might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
+      "description": "You are standing by your desk. The sickening yellow glow of the <i>computer</i> screen pollutes the immediate environs, dispelling any capacity for levity within 2 yards.\n\nThis might not seem like much, but it is only one such repository in a gridlock of wall-less cubicles.\n\nThis might be your last time at the desk, but there is no love lost for the memories you are leaving behind. You check that you have your floppy disk and prepare to get serious.",
       "connections": ["coffee_machine", "superior_section"],
       "objects": {
         "computer": {
@@ -14,7 +14,7 @@
           "conditions": [
             {
               "condition": "!triedSuperior",
-              "text": "You take a deep breath: This should be quick.\nYou boot up the work program and start wailing away on the keyboard.\nLiterally.\nSome look at you in confusion, while others nod sagely, recognizing someone breaking, and respectfully give you the space you need.\nWhen you hit your 37th failed word, a red message appears in the corner: 'Supervisor Alan has been notified. Please go to room 13784p6 for your meeting [A Quick Chat]. Bring the printout notice.'\n\nYou saw Alan leave hours ago... But now that you know which office to visit, you can safely get your payday.\nThe computer prints out a notice with the office number, which you disrespectfully put in your pocket.",
+              "text": "You take a deep breath: This should be quick.\n\nYou boot up the work program and start wailing away on the keyboard.\n\nLiterally.\n\nSome look at you in confusion, while others nod sagely, recognizing someone breaking, and respectfully give you the space you need.\n\nWhen you hit your 37th failed word, a red message appears in the corner: 'Supervisor Alan has been notified. Please go to room 13784p6 for your meeting [A Quick Chat]. Bring the printout notice.'\n\nYou saw Alan leave hours ago... But now that you know which office to visit, you can safely get your payday.\n\nThe computer prints out a notice with the office number, which you disrespectfully put in your pocket.",
               "actions": ["notice", "triedSuperior"],
               "actionType": "use"
             },
@@ -30,7 +30,7 @@
           "conditions": [
             {
               "condition": "!blue_puzzle_piece",
-              "text": "For old times' sake, you take a quick peek under your desk. The calendar hangs in the corner, and the crime novel you never got to finish is currently supporting one of the legs on the desk.\nSomething's different, though. Right below your chair lies a blue corner-piece of a puzzle, with the text 'O:roomFirst the' written in very fine print on it.",
+              "text": "For old times' sake, you take a quick peek under your desk. The calendar hangs in the corner, and the crime novel you never got to finish is currently supporting one of the legs on the desk.\n\nSomething's different, though. Right below your chair lies a blue corner-piece of a puzzle, with the text 'O:roomFirst the' written in very fine print on it.",
               "actionType": "look"
             },
             {
@@ -47,7 +47,7 @@
           ]
         },
         "room": {
-          "text": "You observe the room. In this enigmatic tube of an office, an array of <i>computer</i> screens are in sight any way you turn—while you would think looking at the walls would give you a brief reprieve from THE YELLOW LIGHT, lines of head-height mirrors have been installed to make sure that the only place to escape the galling glow is in a fetal position <i>under your desk</i>.\nCurrently, only seven fellow office workers are resorting to this. A record low number!\nWestwards, the <b>superior section</b> looms insignificantly, while to your south, the <b>coffee machine</b> rests."
+          "text": "You observe the room. In this enigmatic tube of an office, an array of <i>computer</i> screens are in sight any way you turn—while you would think looking at the walls would give you a brief reprieve from THE YELLOW LIGHT, lines of head-height mirrors have been installed to make sure that the only place to escape the galling glow is in a fetal position <i>under your desk</i>.\n\nCurrently, only seven fellow office workers are resorting to this. A record low number!\nWestwards, the <b>superior section</b> looms insignificantly, while to your south, the <b>coffee machine</b> rests."
         }
       }
     },
@@ -195,7 +195,7 @@
           ]
         },
         "room": {
-          "text": "The dimly lit room is akin to a fortress bastion: A large steel <b>door</b> blocks the way out, with an out-of-place card reader on the slanting wall next to it.\nIn an attempt at humor from HR that is too little too late, a <i>doormat</i> that reads 'thank you for coming!!' with an overly enthusiastic legally distinct mouse lies in front of the entrance. The <i>toilet</i> is 'accessible' via a door to the left of the entrance, but is better appreciated as a modern art piece or statement.\n\nTo the north, the <b>coffee machine</b> beckons.\nThrough the entrance, you feel the call of <b>home</b>, but it might not yet be time.\nTo the west, the paradoxical one-way door to <b>your desk</b> lies open."
+          "text": "The dimly lit room is akin to a fortress bastion: A large steel <b>door</b> blocks the way out, with an out-of-place card reader on the slanting wall next to it.\n\nIn an attempt at humor from HR that is too little too late, a <i>doormat</i> that reads 'thank you for coming!!' with an overly enthusiastic legally distinct mouse lies in front of the entrance. The <i>toilet</i> is 'accessible' via a door to the left of the entrance, but is better appreciated as a modern art piece or statement.\n\nTo the north, the <b>coffee machine</b> beckons.\nThrough the entrance, you feel the call of <b>home</b>, but it might not yet be time.\nTo the west, the paradoxical one-way door to <b>your desk</b> lies open."
         }
       }
     },
@@ -260,7 +260,7 @@
           "conditions": [
             {
               "condition": "inOffice && !secretFloppy",
-              "text": "At last!\nYou rush over to the floppy receptacle and shove your floppy disk in. Some smooth keyboard taps later you get the satisfying 'data transfer complete' message on the blue computer screen, and—\nHey, hang on, managers get BLUE screens? That's unfair! *I* want a blue screen!\n... Nevermind, you got what you came for, and soon you can kiss this life of torpor goodbye.\n\nYou eject the floppy disk and pick up your employee badge.\nYou are ready to leave.",
+              "text": "At last!\nYou rush over to the floppy receptacle and shove your floppy disk in. Some smooth keyboard taps later you get the satisfying 'data transfer complete' message on the blue computer screen, and—\n\nHey, hang on, managers get BLUE screens? That's unfair! *I* want a blue screen!\n\n... Nevermind, you got what you came for, and soon you can kiss this life of torpor goodbye.\n\nYou eject the floppy disk and pick up your employee badge.\n\nYou are ready to leave.",
               "actions": ["secretFloppy"],
               "actionType": "use"
             },
@@ -277,7 +277,7 @@
       }
     },
     "home": {
-      "description": "You have done it.\nYou open the door, and your beagle dog, <i>Markie</i>, gives you a warm welcome. You turn on the lights, and your cozy apartment springs to life: The radio plays a snazzy tune dedicated to your victory, your cork<i>board</i> basking in the evening light, and your favorite show starts playing on your television—and it's the start of the next episode you were going to watch!\n\nAll is, once again, well.",
+      "description": "You have done it.\n\nYou open the door, and your beagle dog, <i>Markie</i>, gives you a warm welcome. You turn on the lights, and your cozy apartment springs to life: The radio plays a snazzy tune dedicated to your victory, your cork<i>board</i> basking in the evening light, and your favorite show starts playing on your television—and it's the start of the next episode you were going to watch!\n\nAll is, once again, well.",
       "connections": [],
       "objects": {
         "markie": {
@@ -301,7 +301,7 @@
           "conditions": [
             {
               "condition": "!the_solution",
-              "text": "You look at the cork board. Months from now, you will surely look back on this, thinking you were insane. But right now, you bask in its glory.\nAll the pages of the workplace contract are hung up on this cork board, from end to end. It is an item all employees have, including the cork board, of course.\nMost probably put it away in storage, but not you. You needed to remind yourself why you were doing this.\nOn top of the contract pages, an album's worth of images of Markie has been pinned, obscuring most of the message. But a red thread connects certain letters on the board to form a message, engraved in your heart:\n<color=#008000>CATHARSIS</color>.\nTo you, this is a secret word that has opened more doors than you can possibly count.\nBut to YOU, sitting there, this might just be what you need to receive a sliver of the solace gained by reaching my home.\nIn the end, you just need to make it <color=#008000>WORK</color>.",
+              "text": "You look at the cork board. Months from now, you will surely look back on this, thinking you were insane. But right now, you bask in its glory.\n\nAll the pages of the workplace contract are hung up on this cork board, from end to end. It is an item all employees have, including the cork board, of course.\nMost probably put it away in storage, but not you. You needed to remind yourself why you were doing this.\n\nOn top of the contract pages, an album's worth of images of Markie has been pinned, obscuring most of the message. But a red thread connects certain letters on the board to form a message, engraved in your heart:\n\n<color=#008000>CATHARSIS</color>.\nTo you, this is a secret word that has opened more doors than you can possibly count.\n\nBut to YOU, sitting there, this might just be what you need to receive a sliver of the solace gained by reaching my home.\nIn the end, you just need to make it <color=#008000>WORK</color>.",
               "actions": ["the_solution"],
               "actionType": "look"
             },

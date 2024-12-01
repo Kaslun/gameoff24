@@ -575,8 +575,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -722,13 +722,14 @@ MonoBehaviour:
   output: {fileID: 1336755733}
   hangmanOutput: {fileID: 167424707}
   errorMessage: Incorrect input, try 'help' if you're stuck
-  welcomeMessage: Welcome to Corporate INC!
+  welcomeMessage: Welcome to Bartleby Consultant Calculators INC!
   screens: []
   helpManager: {fileID: 1604307294}
   screenManager: {fileID: 1215872081}
   textManager: {fileID: 24448115}
   programManager: {fileID: 1604307295}
   lockManager: {fileID: 1604307296}
+  workManager: {fileID: 1430281874}
   isWaitingForPassword: 0
 --- !u!1 &212256870
 GameObject:
@@ -866,8 +867,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1743,8 +1744,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2029,6 +2030,7 @@ MonoBehaviour:
   currentRoom:
     description: 
   textManager: {fileID: 24448115}
+  commandManager: {fileID: 0}
 --- !u!1 &980169062
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,8 +3260,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3367,7 +3369,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: A game made by peeps
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0eb659194be4b66408b3ddb1c8b4e350, type: 2}
   m_sharedMaterial: {fileID: 0}
@@ -3394,8 +3396,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3541,6 +3543,7 @@ MonoBehaviour:
   output: {fileID: 1782332071}
   fileName: WorkWords.txt
   words: []
+  canShutdown: 0
   preFix: 'Type: '
   postFix: '
 
@@ -3550,6 +3553,7 @@ MonoBehaviour:
   textManager: {fileID: 24448115}
   textReader: {fileID: 24448117}
   screenManager: {fileID: 1215872081}
+  commandManager: {fileID: 193680209}
 --- !u!1 &1478357185
 GameObject:
   m_ObjectHideFlags: 0
@@ -4041,7 +4045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63081cbc6a327d24fa83be5a6c023e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filePath: HelpPages/Help_01_Text.txt
+  filePath: HelpPages/Help_
   folderPath: 
   textReader: {fileID: 24448117}
   helpPageNumber: 0
@@ -4514,8 +4518,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4800,6 +4804,7 @@ GameObject:
   - component: {fileID: 1827279358}
   - component: {fileID: 1827279357}
   - component: {fileID: 1827279356}
+  - component: {fileID: 1827279359}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -4865,6 +4870,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1827279359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827279355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b26078f879f5e443a62e4e33eb828ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  output: {fileID: 1379105816}
+  textManager: {fileID: 24448115}
+  credits: "Thank you for playing our game!\\n\\nCredits:\\n\\nGame Design & Programming\\nKasper
+    Mork Lunde\\n\\nGame design & Narrative Design\\nVetle Bj\xF8rn Berlin\\n\\nSpecial
+    Thanks\\nOur friends and family for their patience and support\\n\\nMade with
+    passion and a little too much coffee"
+  shutdownTimer: 100
 --- !u!1 &1893593563
 GameObject:
   m_ObjectHideFlags: 0
@@ -4949,8 +4973,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

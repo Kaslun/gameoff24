@@ -1,1 +1,9 @@
-a list of office supplies that was ordered a year ago
+Supplies for the office, 2021:
+7x desks
+12x office chairs
+20x coffee cups w/ company logo
+Addition, 2022:
+1x manual steel saw
+80x desk feet dampeners
+100x wheel dampeners
+19x coffee cups, numbered [107-126]

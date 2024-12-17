@@ -81,12 +81,12 @@
             },
             {
               "condition": "!emptyCoffee && !fullCoffee",
-              "text": "You don't have a cup to fill with coffee.",
+              "text": "There is coffee; but, alas, you have no cup.",
               "actionType": "use"
             },
             {
               "condition": "fullCoffee",
-              "text": "Your cup is already full. Perhaps you should use it elsewhere.",
+              "text": "Your cup runneth over... well, not actually, but the coffee machine is rigged to break if an already filled cup gets a second helping.\n You choose not to break the coffee machine, for the others' sake.",
               "actionType": "use"
             }
           ]
@@ -96,29 +96,29 @@
           "conditions": [
             {
               "condition": "",
-              "text": "The trolley contains <i>cups</i>, teaspoons, and a packet of sweetener. The trolley is shaking uncontrollably.",
+              "text": "The Trolley contains three <i>cups</i>, nine tea spoons and one packet of sweetener. \n From experience, you know that milk and other condiments must be brought from home... But given the lack of storage after what HR has labeled 'the incident', few choose to bring milk outside of the winter months.",
               "actionType": "look"
             }
           ]
         },
         "cup": {
-          "text": "A coffee cup is on the trolley.",
+          "text": "Three coffee cups are on the trolley.",
           "conditions": [
             {
               "condition": "!emptyCoffee",
-              "text": "You take a coffee <b>cup</b> from the trolley.",
+              "text": "You take a coffee <b>cup</b> from the Trolley, which causes it to lose balance and shake uncontrollably. You briefly think to report to HR that a <i>wheel</i> on the Trolley might be in disrepair, but then you remember that 1) they would not lift a finger to solve it, and 2) this will soon no longer be your problem.",
               "actions": ["emptyCoffee"],
               "actionType": "take"
             },
             {
               "condition": "emptyCoffee || fullCoffee",
-              "text": "There are no more cups to take.",
+              "text": "Given the coffee cup shortage, you choose to let some poor souls find solace in the remaining cups.",
               "actionType": "take"
             }
           ]
         },
         "wheel": {
-          "text": "A wheel on the trolley seems loose.",
+          "text": "A wheel on the trolley looks see-through, but it's just vibrating v e r y fast.",
           "conditions": [
             {
               "condition": "!red_puzzle_piece",
@@ -133,13 +133,13 @@
             },
             {
               "condition": "red_puzzle_piece",
-              "text": "You have already taken the puzzle piece from the wheel.",
+              "text": "You have already taken the puzzle piece from the wheel. Seek no further demise in its oscillation.",
               "actionType": "look"
             }
           ]
         },
         "room": {
-          "text": "The room is quiet—too quiet. A <i>coffee machine</i> rests awkwardly on a pillar a little too low in what is nearly the center of the room, with several connecting tubes and cables lying loosely between it and the northern wall. A small, rickety <i>trolley</i> has been placed next to it, with what you could call 'coffee paraphernalia.'\n\nYou can see the pale blue lights from the <b>superior section</b> reflect along the walls of the hallway northwest, while to the north you feel the yellow glow of <b>your desk</b>. Further south, the <b>office entrance</b> taunts you with its dark embrace. Literally! The lights went out last month, and they have yet to fix them."
+          "text": "The room is quiet — too quiet. A <i>coffee machine</i> rests awkwardly on a pillar a little too low in what is nearly the center of the room, with several connecting tubes and cables lying loosely between it and the northern wall. A small, rickety <i>trolley</i> has been placed next to it, with what you could call 'coffee paraphernalia.'\n\nYou can see the pale blue lights from the <b>superior section</b> reflect along the walls of the hallway northwest, while to the north you feel the yellow glow of <b>your desk</b>. Further south, the <b>office entrance</b> taunts you with its dark embrace. Literally! The lights went out last month, and they have yet to fix them."
         }
       }
     },
@@ -179,7 +179,7 @@
             },
             {
               "condition": "green_puzzle_piece",
-              "text": "It's just a doormat.",
+              "text": "It's just a doormat. with a puzzle-shaped indent from where you picked up the piece from underneath it.\n... I hope it wasn't a load-bearing puzzle piece.",
               "actionType": "look"
             }
           ]
@@ -200,7 +200,7 @@
       }
     },
     "superior_section": {
-      "description": "You are standing at the gates of those with the power to take your joy. One would think that they might use this joy for something useful, but so far, the bi-yearly (no, not the twice-a-year kind) pizza party is the closest they have gotten... And they made sure to pick pizza pies not chosen from the survey.\nTo the east, <b>Alan's desk</b> is shrouded in mystery, with a faint glow suggesting its location. Best do what needs to be done and leave.",
+      "description": "You are standing at the gates of those with the power to take your joy. One would think that they might use this joy for something useful, but so far, the bi-yearly (no, not the twice-a-year kind) pizza party is the closest they have gotten... And they made sure to pick pizza pies not chosen from the survey.\nSomewhere, <b>Alan's desk</b> lays hidden among the cubicles. You will not find kind souls here; best do what needs to be done and get yourself away from this place.",
       "connections": ["your_desk", "coffee_machine"],
       "objects": {
         "potted_plant": {
@@ -229,12 +229,12 @@
           "conditions": [
             {
               "condition": "!notice",
-              "text": "You try to understand the map to no avail. At the bottom, it reads: 'Cross-reference your superior meeting notice with directional chart for directions.'",
+              "text": "You try to understand the map to no avail. At the bottom, it reads: 'Cross-reference your superior meeting notice with directional chart for directions.'You try to understand the map to no avail - you cannot remember your trigonometry well enough to figure out the position and angle you have to cross your eyes at to read the map. \n As your spirit sinks, you notice a small line of text at the bottom of the A5-printout that reads 'cross-reference your superior meeting notice from poor performance with directional chart for directions.' \n So... If you perform poorly, you get a guiding star to your goal? \n \n You have been waiting for this.",
               "actionType": "look"
             },
             {
               "condition": "notice",
-              "text": "Using the notice, the path to <b>Alan's desk</b> becomes clear. The cubicle lies eastward in the superior section.",
+              "text": "Using the notice, the path you need to take suddenly becomes clear. Holding the notice in front of you like a warding signet, you carefully tread the cubicles, making sure not to make eye contact with anything not residing in your goal. \n \n After what feels like hours, you realize you have arrived at Alan's cubicle. \n It would be wise to look around <i>Alan's desk</i>.",
               "actions": ["inOffice"],
               "actionType": "use"
             }
@@ -245,12 +245,12 @@
           "conditions": [
             {
               "condition": "inOffice",
-              "text": "At Alan's desk, you find a <i>floppy receptacle</i> and some key cards. The desk is strangely organized, with a stack of papers neatly arranged.",
+              "text": "Alan's office is... muted, to put it nicely. Alan's computer is on his desk, with the <i>floppy receptacle</i> dangerously unguarded, along with a stack of key cards lying on top of it, held in place by a trophy that reads 'Second Best Employee of 19th of April'. A strange <i>puzzle</i> lies next to the computer. \n If you are ready to escape from this cursed place: To the east, Your Desk is patiently waiting for your retreat. To the south-east, The coffee machine is ready to comfort you.",
               "actionType": "look"
             },
             {
               "condition": "!inOffice",
-              "text": "You cannot locate Alan's desk without the <i>map</i>.",
+              "text": "You consider looking into one of the other offices. Maybe you can bypass having to find Alan's office with ther <i>map</i>? \n As you take a tentative step, you hear a muffled cough. \n Losing your nerve, you skedaddle back to the entrance of the cubicles. Better to play it safe and find an excuse to visit Alan's cubicle.",
               "actionType": "look"
             }
           ]
@@ -268,11 +268,49 @@
               "condition": "secretFloppy",
               "text": "You take a minute to envy the blue screen.",
               "actionType": "look"
+            },
+			{
+              "condition": "!inOffice && !secretFloppy",
+              "text": "It is not within sight. Drat!",
+              "actionType": "look"
             }
           ]
         },
+		"puzzle": {
+          "text": "A strange puzzle lies next to the computer.",
+          "conditions": [
+            {
+              "condition": "!inOffice",
+              "text": "Yes, this situation surely is quite the puzzle.",
+              "actionType": "look"
+            },
+            {
+              "condition": "inOffice",
+              "text": "The puzzle on the desk is... Puzzling. \n An explosion of colored squares covers the newspaper cutout, with five prominently missing squares. A smart-looking anthromorphic light bulb has a speech bubble next to it saying 'can YOU solve this poignant pickle of a puzzle? Write it into the <i>terminal</i> for a secret message!' \n While you surely cannot make heads nor tails of this bizarre statement, perhaps someone outside the four walls of this entirely real and not digital office can.",
+              "actionType": "look"
+            }
+          ]
+        },
+		"terminal": {
+          "text": "A terminal certainly exists somewhere in the time-space continuum.",
+          "conditions": [
+            {
+              "condition": "!inOffice",
+              "text": "Yes, having to stay even a day longer in this hole would have terminal consequences in the long term. Ask your psychologist, they'll agree.",
+              "actionType": "look"
+            },
+            {
+              "condition": "inOffice && red_puzzle_piece && blue_puzzle_piece && green_puzzle_piece && cyan_puzzle_piece && yellow_puzzle_piece",
+              "text": "Pondering the pulitzer puzzle, you glance up at the computer Terminal. \n Somehow, it was primed to accept five inputs, with some strange line breaks appearing between some letters: \n \n _ _ _ _ - _ C K ! \n \n What this means and where to use it is anyone's guess. Surely, there must be somewhere to put this in... but not while playing this award-winning adventure game. Somehow, you are forced to wink.",
+              "actionType": "look"
+            },
+			"condition": "(!red_puzzle_piece && inOffice)|| (!blue_puzzle_piece && inOffice) || (!green_puzzle_piece && inOffice) || (!cyan_puzzle_piece && inOffice) || (!yellow_puzzle_piece && inOffice)",
+              "text": "You look around to figure out what 'the Terminal' could mean, but the answer eludes you. Perhaps you need more pieces to solve the puzzle?",
+              "actionType": "look"
+          ]
+        },
         "room": {
-          "text": "In the surgical blue light, a village of cubicles builds the image of a modern crypt—you can almost swear you see a trail of smoke sweep between the empty spaces in the distance. A <i>potted plant</i> struggles here. A <i>map</i> that more closely resembles a magic eye painting hangs on the cubicle walls.\nWhile you are looking for the cubicle of your manager, Alan, there are other offices around, but it might not be a good idea to poke your nose where pay cuts lie waiting.\nTo the east, <b>your desk</b> is waiting. To the southeast, the <b>coffee machine</b> is ready to comfort you."
+          "text": "In the surgical blue light, a village of cubicles builds the image of a modern crypt — you can almost swear you see a trail of smoke sweep between the empty spaces in the distance. A <i>potted plant</i> struggles to bring life to the joy-sucking landscape and fails miserably. A <i>map</i> that more closely resembles a magic eye painting hangs on the cubicle wallson the outskirts of the cubicle town.\nWhile you are looking for the cubicle of your manager, Alan, there are other offices around, but it might not be a good idea to poke your nose where pay cuts lie waiting.\nTo the east, <b>your desk</b> is patiently waiting for your retreat. To the southeast, the <b>coffee machine</b> is ready to comfort you."
         }
       }
     },
@@ -313,7 +351,7 @@
           ]
         },
         "room": {
-          "text": "The apartment is exactly as you remember it. It might not be large, but it is enough for you, <i>Markie</i> and your cork<i>board</i>"
+          "text": "The apartment is exactly as you remember it. It might not be large, but it is enough for you and Markie. The living room has the television on one end, and an old, green sofa opposite it. A 70's coffee table bought in a yard sale sits at an angle in the middle of the room. On the wall above the sofa hangs a large cork <i>board</i>, full of images of <i>Markie</i>. Everyone who has visited has given your feng shui critique, but you do not care; the chaos gave you energy to survive the order at your workplace. \n If this were any other day, you would dread the time you had to leave the front door to go back to the office via the <b>office entrance</b>... But now, you may finally rest."
         }
       }
     }
@@ -324,27 +362,27 @@
       "conditions": [
         {
           "condition": "floppy",
-          "text": "A completely ordinary floppy disk.",
+          "text": "A completely ordinary floppy disk. Promise.",
           "actionType": "look"
         }
       ]
     },
     "cup": {
-      "text": "A coffee cup.",
+      "text": "A coffee cup, some time known to bear the weight of your world.",
       "conditions": [
         {
           "condition": "fullCoffee",
-          "text": "Your coffee cup is full of delicious coffee.",
+          "text": "In your hand you have a cup of desirable coffee. You wonder how this legal miracle drug came to be, given that the first set of coffee beans must have been only available in very obscure locales, based on the period they were popularized. \n \n You look down at the cup again - but it is empty! While furious that someone stole your coffee, you notice an acrid taste in the back of your throat. Once again, you had subconciously devoured the coffee while your mind wandered. You quickly go and get yourself a refill.",
           "actionType": "look"
         },
         {
           "condition": "emptyCoffee",
-          "text": "Your coffee cup is empty.",
+          "text": "There is nothing in your coffee cup. You should put something appropriate in there.",
           "actionType": "look"
         },
         {
           "condition": "!emptyCoffee && !fullCoffee",
-          "text": "You have no coffee cup.",
+          "text": "Sadly, you have no coffee cup. Your life would improve if you did.",
           "actionType": "look"
         }
       ]
@@ -359,7 +397,7 @@
         },
         {
           "condition": "!notice",
-          "text": "You don't have any notice.",
+          "text": "Notice what? I don't get it.",
           "actionType": "look"
         }
       ]
@@ -371,6 +409,11 @@
           "condition": "blue_puzzle_piece",
           "text": "A puzzle piece, with the text 'O:roomFirst the' written in very fine print on it.",
           "actionType": "look"
+        },
+		{
+          "condition": "!blue_puzzle_piece",
+          "text": "You have yet to find this puzzle piece.",
+          "actionType": "look"
         }
       ]
     },
@@ -381,6 +424,11 @@
           "condition": "red_puzzle_piece",
           "text": "A puzzle piece, with the text 'R:trolley Trolley' printed on it.",
           "actionType": "look"
+        },
+		{
+          "condition": "!red_puzzle_piece",
+          "text": "You have yet to find this puzzle piece.",
+          "actionType": "look"
         }
       ]
     },
@@ -390,6 +438,11 @@
         {
           "condition": "green_puzzle_piece",
           "text": "A puzzle piece. Someone has used a knife to etch the words 'D:toilet #' into it.",
+          "actionType": "look"
+        },
+		{
+          "condition": "!green_puzzle_piece",
+          "text": "You have yet to find this puzzle piece.",
           "actionType": "look"
         }
       ]
@@ -402,6 +455,11 @@
           "text": "A puzzle piece with the text 'V:trophy rank' taped onto it.",
           "actionType": "look"
         }
+		{
+          "condition": "!cyan_puzzle_piece",
+          "text": "You have yet to find this puzzle piece.",
+          "actionType": "look"
+        }
       ]
     },
     "yellow_puzzle_piece": {
@@ -412,6 +470,11 @@
           "text": "A puzzle piece, with the text 'A:rooms amnt.' written in impeccable penmanship.",
           "actionType": "look"
         }
+		{
+          "condition": "!yellow_puzzle_piece",
+          "text": "You have yet to find this puzzle piece.",
+          "actionType": "look"
+        }
       ]
     },
     "the_solution": {
@@ -419,7 +482,12 @@
       "conditions": [
         {
           "condition": "the_solution",
-          "text": "CATHARSIS. Now, get to work.",
+          "text": "<color=#008000>CATHARSIS</color>. Now, get to work.",
+          "actionType": "look"
+        },
+		{
+          "condition": "!the_solution",
+          "text": "Not so fast. According to my immaculate system, you have yet to be granted entrance into my illustrious domain. Thought you could outsmart me, HMMMM!?",
           "actionType": "look"
         }
       ]
@@ -430,6 +498,11 @@
         {
           "condition": "secretFloppy",
           "text": "Your super secret floppy disk containing 'The Payload'.",
+          "actionType": "look"
+        },
+		{
+          "condition": "!secretFloppy",
+          "text": "Alas, Alan's atlas has yet to amass on your floppy, so you must at last yell 'avast!' while aghast. \nSorry, that was mean of me.",
           "actionType": "look"
         }
       ]

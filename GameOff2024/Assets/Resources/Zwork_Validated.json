@@ -319,17 +319,17 @@
       "connections": [],
       "objects": {
         "markie": {
-          "text": "Markie slobbers by your legs, following your every move.",
+          "text": "Markie slobbers by your legs, following your every move. \n You pet Markie. \n Life improves.",
           "conditions": [
             {
               "condition": "!yellow_puzzle_piece",
-              "text": "You pet Markie and find a yellow puzzle piece with 'A:rooms amnt.' written on it.",
+              "text": "You pet Markie once more. Feeling playful, you pull an old trick Markie has seen a hundred times, yet the treat he gets at the end gets him jumping every time. 'Oh, what's that behind your ear, Markie,' you posit. \n Markie freezes, recognizing this song and dance. His tail starts spinning up. \n 'Why, would you look at that! It's a...' \n ... \n ...You hold a yellow puzzle piece in your hand. On it, 'A:rooms amnt.' is written in impeccable penmanship. \n You both stare at the puzzle piece dumbfounded for a few moments. A treat falls from behind the puzzle piece, breaking the spell, and Markie starts running, jumping, and barking across the room in glee.",
               "actions": ["yellow_puzzle_piece"],
               "actionType": "look"
             },
             {
               "condition": "yellow_puzzle_piece",
-              "text": "You pet Markie once more. He's happy.",
+              "text": "You pet Markie once more. Feeling playful, you pull an old trick Markie has seen a hundred times, yet the treat he gets at the end gets him jumping every time. 'Oh, what's that behind your ear, Markie,' you posit. \n Markie freezes, recognizing this song and dance. His tail starts spinning up. Given the previous result you feel some trepidation, but for Markie's sake you must attempt the trick once more. \n 'Why, would you look at that! It's a...' \n ... \n ...'Treat, just for you!' You toss the treat to Markie, and Markie starts running, jumping, and barking across the room in glee.",
               "actionType": "look"
             }
           ]

@@ -177,7 +177,7 @@ superior_section
 			},
 			inOffice
 			{
-				"Alan's office is... muted, to put it nicely. Alan's computer is on his desk, with the Floppy Receptacle dangerously unguarded, with a stack of key cards lying on top of it, held in place by a trophy that reads 'Second Best Employee of 19th of April'. A strange Puzzle lies next to the computer. \n If you are ready to escape from this cursed place: To the east, Your Desk is patiently waiting for your retreat. To the south-east, The coffee machine is ready to comfort you."
+				"Alan's office is... muted, to put it nicely. Alan's computer is on his desk, with the <i>floppy receptacle</i> dangerously unguarded, with a stack of key cards lying on top of it, held in place by a trophy that reads 'Second Best Employee of 19th of April'. A strange Puzzle lies next to the computer. \n If you are ready to escape from this cursed place: To the east, Your Desk is patiently waiting for your retreat. To the south-east, The coffee machine is ready to comfort you."
 			}
 		},
 		potted_plant
@@ -286,7 +286,7 @@ home
 	{
 		room
 		{
-			"The apartment is exactly as you remember it. It might not be large, but it is enough for you and Markie. The living room has the television on one end, and an old, green sofa opposite it. A 70's coffee table bought in a yard sale sits at an angle in the middle of the room. On the wall above the sofa hangs a large cork Board, full of images of Markie. Everyone who has visited has given your feng shui critique, but you do not care; the chaos gave you energy to survive the order at your workplace. \n If this were any other day, you would dread the time you had to leave the front door to go back to the office via the Office Entrance... But now, you may finally rest."
+			"The apartment is exactly as you remember it. It might not be large, but it is enough for you and Markie. The living room has the television on one end, and an old, green sofa opposite it. A 70's coffee table bought in a yard sale sits at an angle in the middle of the room. On the wall above the sofa hangs a large cork <i>board</i>, full of images of <i>Markie</i>. Everyone who has visited has given your feng shui critique, but you do not care; the chaos gave you energy to survive the order at your workplace. \n If this were any other day, you would dread the time you had to leave the front door to go back to the office via the <b>office entrance</b>... But now, you may finally rest."
 		},
 		markie
 		{
